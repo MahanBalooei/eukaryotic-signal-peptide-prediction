@@ -1,14 +1,24 @@
 # LB2_project_Group_7
 The table of our result
 
-data = [
-    ["Category", "Total", "Filtered"],
-    ["Positive", "2949", "2932"],
-    ["Negative", "20615", "20615"]
-]
-
-# Print as Markdown table
-print("| " + " | ".join(data[0]) + " |")
-print("| " + " | ".join(["---"] * len(data[0])) + " |")
-for row in data[1:]:
-    print("| " + " | ".join(row) + " |")
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Total</th>
+      <th>Filtered</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Positive</td>
+      <td>2949</td>
+      <td>2932</td>
+    </tr>
+    <tr>
+      <td>Negative</td>
+      <td>20615</td>
+      <td>20615</td>
+    </tr>
+  </tbody>
+</table>
