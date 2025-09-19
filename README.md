@@ -1,5 +1,7 @@
 # LB2_project_Group_7
-# This table summarizes the dataset process for analysis:
+# "The summarize table of dataset for analysis"
+
+We retrieve data from UniProt and process it in Google Colab to obtain both total and filtered results:
 
 <table>
   <thead>
