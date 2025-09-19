@@ -1,5 +1,5 @@
 # LB2_project_Group_7
-#This table summarizes the dataset process for analysis:
+# This table summarizes the dataset process for analysis:
 
 <table>
   <thead>
