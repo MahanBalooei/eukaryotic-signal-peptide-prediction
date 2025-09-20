@@ -10,9 +10,9 @@ Eukaryotic origin: Limited to eukaryotic taxonomy.\
 Length filter: Sequences ≥ 40 residues.\
 Reviewed status: UniProt-reviewed (Swiss-Prot) entries only.\
 SP evidence: Experimental confirmation of SP presence.\
-SP length: Mature SP ≥ 14 residues.
-Protein existence: Evidence at the protein level (PE1).
-Cleavage site: Confirmed existence.
+SP length: Mature SP ≥ 14 residues.\
+Protein existence: Evidence at the protein level (PE1).\
+Cleavage site: Confirmed existence.\
 
 
 
