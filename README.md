@@ -14,6 +14,8 @@ We retrieve eukaryotic proteins experimentally confirmed to possess signal pepti
 - Protein existence: Evidence at the protein level (PE1).
 - Cleavage site: Confirmed existence.
 
+## Negative Data (Sequences without Signal Peptides)
+
 
 
 # "The summarize table of dataset for analysis"
