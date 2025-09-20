@@ -15,6 +15,14 @@ We retrieve eukaryotic proteins experimentally confirmed to possess signal pepti
 - Cleavage site: Confirmed existence.
 
 ## Negative Data (Sequences without Signal Peptides)
+We select eukaryotic proteins experimentally verified to lack SPs and localize to non-secretory compartments, with these filters:
+- No fragments: Full-length proteins only.
+- Reviewed status: UniProt-reviewed (Swiss-Prot) entries only.
+- Protein existence: Evidence at the protein level (PE1).
+- Eukaryotic origin: Limited to eukaryotic taxonomy.
+- Length filter: Sequences ≥ 40 residues.
+- No SP evidence: Explicitly filtered for absence of any SP (regardless of evidence level).
+- Localization: Experimentally verified to cytosol, nucleus, mitochondrion, plastid, peroxisome, or cell membrane.
 
 
 
