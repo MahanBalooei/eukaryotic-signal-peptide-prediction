@@ -31,7 +31,7 @@ We select eukaryotic proteins experimentally verified to lack SPs and localize t
 ## TSV format:
 - Positive: Tab-separated values with columns: Accession, Organism, Kingdom, Sequence length, SP cleavage
 - Negative: Tab-separated values with columns: Accession, Organism, Kingdom, Sequence length, N-term, transmembrane
-- ## FASTA format:
+## FASTA format:
 Standard sequence headers including UniProt ID and metadata.
 
 
