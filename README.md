@@ -28,8 +28,9 @@ We select eukaryotic proteins experimentally verified to lack SPs and localize t
 - Localization: Experimentally verified to cytosol, nucleus, mitochondrion, plastid, peroxisome, or cell membrane.
 
 # Data Storage and Formatting
-- ## TSV format:
-Tab-separated values with standardized columns (e.g., UniProt ID, Sequence Length, Localization, SP Status, Evidence Level).
+## TSV format:
+- Positive: Tab-separated values with columns: Accession, Organism, Kingdom, Sequence length, SP cleavage
+- Negative: Tab-separated values with columns: Accession, Organism, Kingdom, Sequence length, N-term, transmembrane
 - ## FASTA format:
 Standard sequence headers including UniProt ID and metadata.
 
