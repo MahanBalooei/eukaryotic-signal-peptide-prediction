@@ -4,13 +4,12 @@ This project focuses on creating a high-quality, balanced dataset for signal pep
 
 # Dataset Collection Workflow
 ## Positive Data (Sequences with Signal Peptides)
-We retrieve eukaryotic proteins experimentally confirmed to possess signal peptides, applying the following filters:
-
-No fragments: Full-length proteins only.
-Eukaryotic origin: Limited to eukaryotic taxonomy.
-Length filter: Sequences ≥ 40 residues.
-Reviewed status: UniProt-reviewed (Swiss-Prot) entries only.
-SP evidence: Experimental confirmation of SP presence.
+We retrieve eukaryotic proteins experimentally confirmed to possess signal peptides, applying the following filters:.\
+No fragments: Full-length proteins only.\
+Eukaryotic origin: Limited to eukaryotic taxonomy.\
+Length filter: Sequences ≥ 40 residues.\
+Reviewed status: UniProt-reviewed (Swiss-Prot) entries only.\
+SP evidence: Experimental confirmation of SP presence.\
 SP length: Mature SP ≥ 14 residues.
 Protein existence: Evidence at the protein level (PE1).
 Cleavage site: Confirmed existence.
