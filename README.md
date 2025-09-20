@@ -2,6 +2,9 @@
 ## Project Overview: Eukaryotic Signal Peptide Dataset Collection
 This project focuses on creating a high-quality, balanced dataset for signal peptide (SP) prediction in eukaryotic proteins. By optimizing UniProt data, we collect preliminary positive and negative examples based on strict experimental evidence criteria. The resulting datasets are formatted for downstream machine learning applications in bioinformatics.
 
+# Dataset Collection Workflow
+
+
 # "The summarize table of dataset for analysis"
 
 We retrieve data from UniProt and process it in Google Colab to obtain both total and filtered results:
