@@ -38,7 +38,7 @@ Standard sequence headers including UniProt ID and metadata.
 
 
 ## Dataset Statistics
-After UniProt retrieval and Google Colab processing, the final filtered dataset statistics are:
+After UniProt retrieval and Google Colab processing, the final total and filtered dataset statistics are:
 
 <table>
   <thead>
