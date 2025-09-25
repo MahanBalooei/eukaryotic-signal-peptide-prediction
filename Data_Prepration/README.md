@@ -26,6 +26,8 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 - ![file](https://img.shields.io/badge/cluster--results_rep__seq.fasta-orange) : FASTA file with representative sequences (one per cluster).
 - ![file](https://img.shields.io/badge/cluster--results_cluster.tsv-orange) : TSV file with two columns:\
 Column 1: Sequence ID from the input file.\
-Column 2: ID of the representative sequence for the cluster.\
+Column 2: ID of the representative sequence for the cluster.
+
+Representative sequences are saved as positive_representatives.tsv (2,932 sequences) and negative_representatives.tsv (20,615 sequences) in output/clustered/.
 
 
