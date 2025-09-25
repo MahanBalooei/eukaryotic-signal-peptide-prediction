@@ -28,6 +28,7 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 Column 1: Sequence ID from the input file.\
 Column 2: ID of the representative sequence for the cluster.
 
-Representative sequences are saved as [cluster-results1_cluster.tsv](data%20prepration/cluster-results1_cluster.tsv) (2,932 sequences) and [cluster-results1_cluster.tsv](data%20prepration/cluster-results2_cluster.tsv) (20,615 sequences).
+Representative sequences are saved as [cluster-results1_cluster.tsv](Data_Prepration/data%20preparation/cluster-results1_cluster.tsv) (2,932 sequences) and [cluster-results1_cluster.tsv](Data_Prepration/data%20preparation/cluster-results2_cluster.tsv)
+ (20,615 sequences).
 
 
