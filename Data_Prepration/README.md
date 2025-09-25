@@ -23,4 +23,4 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </pre>
   
 ### Outputs per dataset (positive/negative):
-- cluster-results_rep_seq.fasta <font color="red">red text</font> and <font color="blue">blue text</font>.: 
+- <font color="orange">cluster-results_rep_seq.fasta</font>: 
