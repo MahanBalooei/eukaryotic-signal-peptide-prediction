@@ -7,3 +7,9 @@ The goal of this part is to:
 - Generate new TSV files containing only the representative sequences.
 - Split the data into training (80%) and benchmarking (20%) sets, preserving the positive/negative ratio.
 - Create 5-fold cross-validation subsets from the training set, maintaining the positive/negative ratio in each subset.
+
+## Pipeline Steps
+Cluster Sequences Using MMSeqs2
+Positive and negative sequences are clustered separately at 30% sequence identity and 40% coverage using MMSeqs2.
+The following MMSeqs2 command is used:
+"" mmseqs easy-cluster input.fa cluster-results tmp --min-seq-id 0.3 -c 0.4 --cov-mode 0 --cluster-mode 1 ""
