@@ -12,9 +12,13 @@ The goal of this part is to:
 Cluster Sequences Using MMSeqs2
 Positive and negative sequences are clustered separately at 30% sequence identity and 40% coverage using MMSeqs2.
 The following MMSeqs2 command is used:
+<pre>
+<code class="language-bash">
 mmseqs easy-cluster input.fa cluster-results tmp \
   --min-seq-id 0.3 \
   -c 0.4 \
   --cov-mode 0 \
   --cluster-mode 1
+</code>
+</pre>
   
