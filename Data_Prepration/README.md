@@ -22,3 +22,4 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </code>
 </pre>
   
+## Outputs #### per dataset (positive/negative):
