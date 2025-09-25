@@ -23,4 +23,4 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </pre>
   
 ### Outputs per dataset (positive/negative):
-- <font color="orange">cluster-results_rep_seq.fasta</font>: 
+- ![file](https://img.shields.io/badge/cluster--results_rep__seq.fasta-orange) 
