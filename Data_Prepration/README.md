@@ -23,4 +23,9 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </pre>
   
 ### Outputs per dataset (positive/negative):
-- ![file](https://img.shields.io/badge/cluster--results_rep__seq.fasta-orange) 
+- ![file](https://img.shields.io/badge/cluster--results_rep__seq.fasta-orange) : FASTA file with representative sequences (one per cluster).
+- ![file](https://img.shields.io/badge/cluster-results_cluster.tsv-orange) : TSV file with two columns:
+Column 1: Sequence ID from the input file.\
+Column 2: ID of the representative sequence for the cluster.
+
+
