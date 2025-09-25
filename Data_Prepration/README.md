@@ -9,7 +9,7 @@ The goal of this part is to:
 - Create 5-fold cross-validation subsets from the training set, maintaining the positive/negative ratio in each subset.
 
 ## Pipeline Steps
-Cluster Sequences Using MMSeqs2
+### Cluster Sequences Using MMSeqs2
 Positive and negative sequences are clustered separately at 30% sequence identity and 40% coverage using MMSeqs2.
 The following MMSeqs2 command is used:
 <pre>
@@ -22,4 +22,5 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </code>
 </pre>
   
-## Outputs #### per dataset (positive/negative):
+### Outputs per dataset (positive/negative):
+- cluster-results_rep_seq.fasta <font color="red">red text</font> and <font color="blue">blue text</font>.: 
