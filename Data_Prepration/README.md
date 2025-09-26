@@ -38,7 +38,7 @@ The 2,932 positive and 20,615 negative representative sequences are combined (to
 ### 4.Create 5-Fold Cross-Validation Subsets
 We generate new .tsv files using both the training and benchmarking sets.
 - [(cross.py)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/cross.py) : Randomly splits the training set into 5 subsets while preserving the overall positive/negative ratio.
-- ([test.py)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/test.py) : Creates a test set file from the benchmarking set, following the same format.
+- [(test.py)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/test.py) : Creates a test set file from the benchmarking set, following the same format.
 
 The final files contain:
 - Training set: 219 positives, 1,786 negatives
