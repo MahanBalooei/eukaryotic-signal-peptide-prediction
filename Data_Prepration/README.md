@@ -36,7 +36,7 @@ The 2,932 positive and 20,615 negative representative sequences are combined (to
 - Benchmarking set: 20% (~2,007 sequences). [(here)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/benchmarking_set.tsv)
 
 ### 4.Create 5-Fold Cross-Validation Subsets
-The [(training set)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/training_with_folds.tsv) (8,021 sequences: 874 positive, 7,147 negative) is split into 5 subsets for cross-validation, preserving the positive/negative ratio in each fold using stratified sampling.
+The [(Training set)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/training_with_folds.tsv) (8,021 sequences: 874 positive, 7,147 negative) is split into 5 subsets for cross-validation, preserving the positive/negative ratio in each fold using stratified sampling.
 
 
 
