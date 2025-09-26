@@ -9,7 +9,7 @@ The goal of this part is to:
 - Create 5-fold cross-validation subsets from the training set, maintaining the positive/negative ratio in each subset.
 
 ## Pipeline Steps
-### Cluster Sequences Using MMSeqs2
+### 1.Cluster Sequences Using MMSeqs2
 Positive and negative sequences are clustered separately at 30% sequence identity and 40% coverage using MMSeqs2.
 The following MMSeqs2 command is used:
 <pre>
@@ -22,7 +22,7 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 </code>
 </pre>
   
-### Outputs per dataset (positive/negative):
+### 2.Outputs per dataset (positive/negative):
 - ![file](https://img.shields.io/badge/cluster--results_rep__seq.fasta-orange) : FASTA file with representative sequences (one per cluster).
 - ![file](https://img.shields.io/badge/cluster--results_cluster.tsv-orange) : TSV file with two columns:\
 Column 1: Sequence ID from the input file.\
@@ -30,11 +30,13 @@ Column 2: ID of the representative sequence for the cluster.
 
 Representative sequences are saved as ([Positives](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/cluster-results1_cluster.tsv))(2,932 sequences) and ([Negatives](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/cluster-results2_cluster.tsv)) (20,615 sequences).
 
-### Split Data into Training and Benchmarking Sets
+### 3.Split Data into Training and Benchmarking Sets
 The 2,932 positive and 20,615 negative representative sequences are combined (total: 23,547 sequences) and randomly split into: [(Python script)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/separating.py)
 - Training set: 80% (~8,021 sequences). [(here)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/training_set.tsv)
 - Benchmarking set: 20% (~2,007 sequences). [(here)](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/benchmarking_set.tsv)
 
+### 4.Create 5-Fold Cross-Validation Subsets
+The [(training set)]([https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/benchmarking_set.tsv](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/training_with_folds.tsv))(8,021 sequences: 874 positive, 7,147 negative) is split into 5 subsets for cross-validation, preserving the positive/negative ratio in each fold using stratified sampling.
 
 
 
