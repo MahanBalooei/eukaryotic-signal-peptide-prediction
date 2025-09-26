@@ -28,6 +28,6 @@ mmseqs easy-cluster input.fa cluster-results tmp \
 Column 1: Sequence ID from the input file.\
 Column 2: ID of the representative sequence for the cluster.
 
-Representative sequences are saved as XXXX (2,932 sequences) and XXX (20,615 sequences).
+Representative sequences are saved as [Possitives](relative/path/to/file.md) (2,932 sequences) and XXX (20,615 sequences).
 
 
