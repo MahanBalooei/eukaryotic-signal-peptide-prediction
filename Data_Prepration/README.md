@@ -44,6 +44,31 @@ The final files contain:
 - Training set: 219 positives, 1,786 negatives
 - Test set: 874 positives, 7,147 negatives
 
+## Dataset Statistics
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Training set</th>
+      <th>Test set</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Positive</td>
+      <td>219</td>
+      <td>874</td>
+      <td>1093</td>
+    </tr>
+    <tr>
+      <td>Negative</td>
+      <td>1786</td>
+      <td>7147</td>
+      <td>8933</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
