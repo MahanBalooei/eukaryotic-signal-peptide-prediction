@@ -30,4 +30,8 @@ Column 2: ID of the representative sequence for the cluster.
 
 Representative sequences are saved as ([Positives](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/cluster-results1_cluster.tsv))(2,932 sequences) and ([Negatives](https://github.com/MahanBalooei/LB2_project_Group_7/blob/main/Data_Prepration/cluster-results2_cluster.tsv)) (20,615 sequences).
 
+### Split Data into Training and Benchmarking Sets
+The 2,932 positive and 20,615 negative representative sequences are combined and randomly split into:
+- Training set: 80% of the data (~2,346 positive, ~16,492 negative).
+- Benchmarking set: 20% of the data (~586 positive, ~4,123 negative).
 
