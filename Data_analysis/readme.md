@@ -34,8 +34,8 @@
 <p>The first descriptive analysis compared the lengths of proteins containing signal peptides against those without. A histogram/density plot was generated to visualize the distribution.</p>
 <p>The analysis showed that signal peptide-containing proteins were, on average, slightly longer than proteins without SPs. This confirmed the expectation that secretory proteins tend to have longer sequences.</p>
 
-<img src="Data_analysis/1.protein length/test_protein_lengths.png" alt="Protein length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/1.protein length/training_protein_lengths.png" alt="Protein length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./1.protein length/test_protein_lengths.png" alt="Protein length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./1.protein length/training_protein_lengths.png" alt="Protein length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
 
 <h3 style="color: #6f42c1;">4. Signal Peptide Length Distribution</h3>
 <p>We then focused on the signal peptides themselves:</p>
@@ -45,8 +45,8 @@
 </ul>
 <p>The distribution centered around <strong>~20–25 amino acids</strong>, with most SPs falling within this narrow range. This is consistent with known biology, as signal peptides are typically short hydrophobic sequences that guide protein secretion.</p>
 
-<img src="Data_analysis/2.SP length/test_sp_lengths.png" alt="Signal peptide length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/2.SP length/training_sp_lengths.png" alt="Signal peptide length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./2.SP length/test_sp_lengths.png" alt="Signal peptide length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./2.SP length/training_sp_lengths.png" alt="Signal peptide length distribution plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
 
 <h3 style="color: #6f42c1;">5. Amino Acid Composition Analysis</h3>
 <p>To understand compositional biases, we compared amino acid frequencies in SPs against the background amino acid distribution of SwissProt:</p>
@@ -62,8 +62,8 @@
 </ul>
 <p>This matched the expected hydrophobic character of SPs.</p>
 
-<img src="Data_analysis/3.AA/test_aa_comp.png" alt="Amino acid composition comparison plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/3.AA/training_aa_comp.png" alt="Amino acid composition comparison plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./3.AA/test_aa_comp.png" alt="Amino acid composition comparison plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./3.AA/training_aa_comp.png" alt="Amino acid composition comparison plot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
 
 <h3 style="color: #6f42c1;">6. Taxonomic Classification</h3>
 <p>We analyzed the dataset by <strong>Kingdom</strong> and <strong>Species</strong>:</p>
@@ -74,10 +74,10 @@
 <p>At the species level, the dataset showed a broad distribution, confirming it was not biased toward a single organism.</p>
 <p>We used barplots for clarity.</p>
 
-<img src="Data_analysis/4.Clasification/test_kingdom.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/4.Clasification/training_kingdom.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/4.Clasification/test_organism.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-<img src="Data_analysis/4.Clasification/training_organism.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./4.Clasification/test_kingdom.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./4.Clasification/training_kingdom.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./4.Clasification/test_organism.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./4.Clasification/training_organism.png" alt="Taxonomic distribution barplot" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
 
 <h3 style="color: #6f42c1;">7. Cleavage Site Sequence Logos</h3>
 <p>Finally, we examined the signal peptide cleavage sites:</p>
@@ -92,6 +92,6 @@
 </ul>
 <p>This observation matches <strong>von Heijne’s rules</strong>, which describe conserved residues around cleavage sites.</p>
 
-<img src="Data_analysis/5.cleavage site/weblogo.png" alt="Signal peptide cleavage site logo" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+<img src="./5.cleavage site/weblogo.png" alt="Signal peptide cleavage site logo" width="600" style="display:block; margin: 15px auto; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
 
 </div>
