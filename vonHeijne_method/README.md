@@ -11,6 +11,11 @@ The implementation fetches protein sequences from UniProt, extracts cleavage con
 Data source: A TSV file (training_with_folds.tsv) with columns including Accession, label (1 for SP-positive), SP cleavage (cleavage position), and fold (for CV splits).
 
 ## Key libraries
-pandas, numpy, requests, biopython, scikit-learn, matplotlib / 
+pandas, numpy, requests, biopython, scikit-learn, matplotlib
 +Python 3.8+
+<pre>
+<code class="language-bash">
+pip install pandas numpy requests biopython scikit-learn matplotlib
+</code>
+</pre>
 
