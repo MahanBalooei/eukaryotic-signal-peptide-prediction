@@ -27,4 +27,10 @@ python codebase.py
 </code>
 </pre>
 
+- Fetches sequences from UniProt.
+- Performs 5-fold cross-validation.
+- Builds the von Heijne PSSM per fold (from training positives).
+- Predicts scores and selects thresholds via PR curve maximization of F1.
+- Outputs console logs (e.g., per-fold F1, average threshold ~0.5-1.0, overall CV F1 ~0.7-0.8).
+- Saves plots: cv_pr_curve.png and cv_roc_curve.png.
 
