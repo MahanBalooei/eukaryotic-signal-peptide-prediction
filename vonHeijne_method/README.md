@@ -10,4 +10,4 @@ This repository implements the von Heijne method for detecting signal peptides (
 The implementation fetches protein sequences from UniProt, extracts cleavage contexts from a provided dataset, builds the model, and evaluates performance. A heatmap visualizes the learned log-odds weights.
 Data source: A TSV file (training_with_folds.tsv) with columns including Accession, label (1 for SP-positive), SP cleavage (cleavage position), and fold (for CV splits).
 
-## Requirements
+## 
