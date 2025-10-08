@@ -19,4 +19,6 @@ pip install pandas numpy requests biopython scikit-learn matplotlib
 </pre>
 ## Usage
 1- Prepare data: Place training_with_folds.tsv in the root directory. This file should contain ~1,000 samples (e.g., 873 positives) with UniProt accessions, labels, cleavage sites, and fold assignments./
+
 2- Run cross-validation (main evaluation script):/
+
