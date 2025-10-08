@@ -12,7 +12,7 @@ Data source: A TSV file (training_with_folds.tsv) with columns including Accessi
 
 ## Key libraries
 pandas, numpy, requests, biopython, scikit-learn, matplotlib
-+Python 3.8+
+++ Python 3.8+
 <pre>
 <code class="language-bash">
 pip install pandas numpy requests biopython scikit-learn matplotlib
