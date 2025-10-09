@@ -33,6 +33,9 @@ python codebase.py
 - Predicts scores and selects thresholds via PR curve maximization of F1.
 - Outputs console logs (e.g., per-fold F1, average threshold ~0.5-1.0, overall CV F1 ~0.7-0.8).
 - Saves plots: cv_pr_curve.png and cv_roc_curve.png.
+<img width="800" height="600" alt="cv_pr_curve" src="https://github.com/user-attachments/assets/90a15570-494d-4eef-bfbe-078764d55aa6" />
+
+<img width="800" height="600" alt="cv_roc_curve" src="https://github.com/user-attachments/assets/cb423f6d-9452-41ba-8b0e-c7ea36165c9c" />
 
 3- Generate weight heatmap (visualize full model from all positives):
 <pre>
@@ -40,4 +43,6 @@ python codebase.py
 python Heatmap.py
 </code>
 </pre>
+<img width="3319" height="2363" alt="von_heijne_weights_heatmap" src="https://github.com/user-attachments/assets/d26cbfde-ce14-4e5d-8b70-92f50289ffcf" />
+
 
