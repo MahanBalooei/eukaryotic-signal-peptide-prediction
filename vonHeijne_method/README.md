@@ -36,8 +36,9 @@ python codebase.py
 - Saves plots: cv_pr_curve.png and cv_roc_curve.png.
 
 <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-<img width="800" height="600" alt="cv_pr_curve" src="https://github.com/user-attachments/assets/90a15570-494d-4eef-bfbe-078764d55aa6" />
-<img width="800" height="600" alt="cv_roc_curve" src="https://github.com/user-attachments/assets/cb423f6d-9452-41ba-8b0e-c7ea36165c9c" />
+     <img width="600" height="400" alt="cv_pr_curve" src="https://github.com/user-attachments/assets/90a15570-494d-4eef-bfbe-078764d55aa6" />
+     <img width="600" height="400" alt="cv_roc_curve" src="https://github.com/user-attachments/assets/cb423f6d-9452-41ba-8b0e-c7ea36165c9c" />
+</div>
 
 
 ### 3- Generate weight heatmap (visualize full model from all positives):
