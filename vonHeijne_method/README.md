@@ -35,10 +35,10 @@ python codebase.py
 - Outputs console logs (e.g., per-fold F1, average threshold ~0.5-1.0, overall CV F1 ~0.7-0.8).
 - Saves plots: cv_pr_curve.png and cv_roc_curve.png.
 
-<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-     <img width="600" height="400" alt="cv_pr_curve" src="https://github.com/user-attachments/assets/90a15570-494d-4eef-bfbe-078764d55aa6" />
-     <img width="600" height="400" alt="cv_roc_curve" src="https://github.com/user-attachments/assets/cb423f6d-9452-41ba-8b0e-c7ea36165c9c" />
-</div>
+
+<img width="600" height="400" alt="cv_pr_curve" src="https://github.com/user-attachments/assets/90a15570-494d-4eef-bfbe-078764d55aa6" />
+<img width="600" height="400" alt="cv_roc_curve" src="https://github.com/user-attachments/assets/cb423f6d-9452-41ba-8b0e-c7ea36165c9c" />
+
 
 
 ### 3- Generate weight heatmap (visualize full model from all positives):
@@ -47,7 +47,7 @@ python codebase.py
 python Heatmap.py
 </code>
 </pre>
-<img width="3319" height="2363" alt="von_heijne_weights_heatmap" src="https://github.com/user-attachments/assets/d26cbfde-ce14-4e5d-8b70-92f50289ffcf" />
+<img width="2319" height="1363" alt="von_heijne_weights_heatmap" src="https://github.com/user-attachments/assets/d26cbfde-ce14-4e5d-8b70-92f50289ffcf" />
 
 - Builds PSSM from all positive examples.
 - Saves: von_heijne_weights_heatmap.png.
