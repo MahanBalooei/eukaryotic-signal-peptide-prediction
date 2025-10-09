@@ -50,3 +50,18 @@ python Heatmap.py
 - Builds PSSM from all positive examples.
 - Saves: von_heijne_weights_heatmap.png.
 
+## Model Details
+### Von Heijne PSSM Construction
+- Extract 15-mer contexts around annotated cleavage sites from positive examples.
+- Compute position-specific amino acid frequencies with pseudocount=1.
+- Log-odds: (\log\left(\frac{f_{pos,aa}}{b_{aa}}\right)), where (f_{pos,aa}) is the frequency and (b_{aa}) is the Swiss-Prot background.
+- Score a potential cleavage at position (k): Sum of log-odds for the context window.
+- Max score across possible sites (15 ≤ k ≤ 100) is the protein's SP score.
+
+### Thresholding
+- Per-fold: Optimize threshold on PR curve to maximize F1-score.
+- Overall: Use average threshold for final predictions.
+
+## Results
+
+
