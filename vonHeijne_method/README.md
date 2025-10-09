@@ -34,3 +34,10 @@ python codebase.py
 - Outputs console logs (e.g., per-fold F1, average threshold ~0.5-1.0, overall CV F1 ~0.7-0.8).
 - Saves plots: cv_pr_curve.png and cv_roc_curve.png.
 
+3- Generate weight heatmap (visualize full model from all positives):
+<pre>
+<code class="language-bash">
+python Heatmap.py
+</code>
+</pre>
+
