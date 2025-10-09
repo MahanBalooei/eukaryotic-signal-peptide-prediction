@@ -47,7 +47,7 @@ python codebase.py
 python Heatmap.py
 </code>
 </pre>
-<img width="1319" height="363" alt="von_heijne_weights_heatmap" src="https://github.com/user-attachments/assets/d26cbfde-ce14-4e5d-8b70-92f50289ffcf" />
+<img width="400" height="600" alt="von_heijne_weights_heatmap" src="https://github.com/user-attachments/assets/d26cbfde-ce14-4e5d-8b70-92f50289ffcf" />
 
 - Builds PSSM from all positive examples.
 - Saves: von_heijne_weights_heatmap.png.
