@@ -47,6 +47,7 @@ python codebase.py
 python Heatmap.py
 </code>
 </pre>
+<img width="800" height="600" alt="Figure_1" src="https://github.com/user-attachments/assets/5712b4d0-9808-41af-86a8-f5573517ee4b" />
 
 
 - Builds PSSM from all positive examples.
