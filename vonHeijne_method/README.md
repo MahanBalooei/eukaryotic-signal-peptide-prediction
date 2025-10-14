@@ -51,7 +51,7 @@ python Heatmap.py
 
 
 - Builds PSSM from all positive examples.
-- Saves: von_heijne_weights_heatmap.png.
+- Saves: HM.png
 
 ## Model Details
 ### Von Heijne PSSM Construction
