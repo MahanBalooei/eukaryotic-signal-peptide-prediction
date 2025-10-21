@@ -1,30 +1,45 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import numpy as np
+from sklearn.preprocessing import StandardScaler
 
-# Load data
-df = pd.read_csv('features.csv')
+# Load features with Accession
+features_df = pd.read_csv('features.csv')
 
-# Assume 'net_charge' as target (regression); adjust if needed
-target_col = 'net_charge'
-X = df.drop(columns=[target_col])
-y = df[target_col]
+# Load labels (from TSV file)
+labels_df = pd.read_csv('training_with_folds.tsv', sep='\t')
+labels_df['label'] = pd.to_numeric(labels_df['label'], errors='coerce').fillna(0).astype(int)
 
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Merge on Accession
+merged_df = features_df.merge(labels_df[['Accession', 'label']], on='Accession')
 
-# Fit RandomForest
-rf = RandomForestRegressor(n_estimators=100, random_state=42)
+# Prepare X and y
+X = merged_df.drop(columns=['Accession', 'label'])
+y = merged_df['label']
+
+# Scale features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Fit Random Forest for feature selection
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
 rf.fit(X_train, y_train)
 
-# Feature importances
+# Extract feature importances
 importances = pd.DataFrame({
     'feature': X.columns,
     'importance': rf.feature_importances_
-}).sort_values('importance', ascending=False)
+}).sort_values(by='importance', ascending=False)
 
-# Save results
+# Save to CSV
 importances.to_csv('feature_importances.csv', index=False)
+print("✅ Feature importances saved to 'feature_importances.csv'")
 
-print("Feature selection complete. Check 'feature_importances.csv'.")
+
+
+
+
+
