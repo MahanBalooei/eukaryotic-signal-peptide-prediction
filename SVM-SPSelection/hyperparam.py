@@ -1,45 +1,47 @@
 import pandas as pd
-from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.svm import SVC
-from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
 # Load data
-df = pd.read_csv('features.csv')
-features = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y', 
-            'pos_fraction_N5', 'molecular_weight', 'helix_prop', 'sheet_prop', 'coil_prop', 'avg_hydro', 'max_hydro']
-X = df[features]
-y = df['net_charge']
-y = (y > 0).astype(int)  # Binarize: 1 for positive net_charge, 0 otherwise
+features_df = pd.read_csv('features.csv')
+labels_df = pd.read_csv('training_with_folds.tsv', sep='\t')
+labels_df['label'] = pd.to_numeric(labels_df['label'], errors='coerce').fillna(0).astype(int)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Merge and prepare X and y
+df = features_df.merge(labels_df[['Accession', 'label']], on='Accession')
+X = df.drop(columns=['Accession', 'label'])
+y = df['label']
 
-# Pipeline for scaling
-pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
+# Pipeline
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svc', SVC())
+])
 
-# Grid search for linear kernel
-param_grid_linear = {'svc__C': [0.1, 1, 10, 100, 1000]}
-grid_linear = GridSearchCV(pipe, param_grid_linear, cv=5, scoring='accuracy')
-grid_linear.fit(X_train, y_train)
-print('Best linear:', grid_linear.best_params_, 'Accuracy:', grid_linear.best_score_)
+# Hyperparameter grid
+param_grid = {
+    'svc__kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+    'svc__C': [0.1, 1, 10],
+    'svc__gamma': ['scale', 'auto'],         # used in rbf, poly, sigmoid
+    'svc__degree': [2, 3, 4],                # used in poly
+    'svc__coef0': [0.0, 0.1, 0.5],           # used in poly, sigmoid
+}
 
-# Grid search for RBF kernel
-param_grid_rbf = {'svc__C': [0.1, 1, 10, 100], 'svc__gamma': ['scale', 'auto', 0.001, 0.01, 0.1]}
-grid_rbf = GridSearchCV(pipe, param_grid_rbf, cv=5, scoring='accuracy')
-grid_rbf.fit(X_train, y_train)
-print('Best RBF:', grid_rbf.best_params_, 'Accuracy:', grid_rbf.best_score_)
+# GridSearch with 5-fold cross-validation
+grid = GridSearchCV(pipe, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
+grid.fit(X, y)
 
-# Grid search for poly kernel
-param_grid_poly = {'svc__C': [0.1, 1, 10], 'svc__gamma': ['scale', 0.001, 0.01], 
-                   'svc__degree': [2, 3], 'svc__coef0': [0, 1]}
-grid_poly = GridSearchCV(pipe, param_grid_poly, cv=5, scoring='accuracy')
-grid_poly.fit(X_train, y_train)
-print('Best poly:', grid_poly.best_params_, 'Accuracy:', grid_poly.best_score_)
+# Best parameters and score
+print("✅ Best Accuracy:", grid.best_score_)
+print("🏆 Best Parameters:", grid.best_params_)
 
-# Save results to CSV
-results = []
-for name, grid in [('linear', grid_linear), ('rbf', grid_rbf), ('poly', grid_poly)]:
-    results.append({'kernel': name, 'best_params': str(grid.best_params_), 'best_accuracy': grid.best_score_})
-df_results = pd.DataFrame(results)
-df_results.to_csv('hyperparam_results.csv', index=False)
-print("Results saved to hyperparam_results.csv")
+# Save all results to CSV
+results_df = pd.DataFrame(grid.cv_results_)
+results_df.to_csv('svm_gridsearch_results.csv', index=False)
+print("📁 Grid search results saved to 'svm_gridsearch_results.csv'")
+
+
+
+
