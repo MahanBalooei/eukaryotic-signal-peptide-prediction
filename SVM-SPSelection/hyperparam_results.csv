@@ -1,0 +1,4 @@
+kernel,best_params,best_r2
+linear,{'svr__C': 10},0.6178444214890845
+rbf,"{'svr__C': 100, 'svr__gamma': 0.001}",0.6820963457041729
+poly,"{'svr__C': 10, 'svr__coef0': 0, 'svr__degree': 2, 'svr__gamma': 0.001}",0.6721957080026024
