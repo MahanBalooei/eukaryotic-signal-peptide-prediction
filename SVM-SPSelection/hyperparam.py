@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.svm import SVR
+from sklearn.svm import SVR, SVC
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
