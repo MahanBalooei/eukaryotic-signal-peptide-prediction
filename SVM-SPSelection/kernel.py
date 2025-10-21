@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 import numpy as np
 
 # Load data
-df = pd.read_csv('features.tsv', sep='\t')
+df = pd.read_csv('features.csv')
 
 # Assume 'net_charge' as target; use all features for simplicity
 target_col = 'net_charge'
