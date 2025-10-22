@@ -1,4 +1,0 @@
-kernel,best_params,best_accuracy
-linear,{'svc__C': 1},0.7873144132221824
-rbf,"{'svc__C': 10, 'svc__gamma': 0.001}",0.7985051631038513
-poly,"{'svc__C': 10, 'svc__coef0': 0, 'svc__degree': 2, 'svc__gamma': 0.001}",0.7985051631038513
