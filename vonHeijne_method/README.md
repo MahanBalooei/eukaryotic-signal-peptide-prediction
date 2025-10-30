@@ -67,4 +67,38 @@ python Heatmap.py
 
 ## Results
 
+<table align="center">
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Average threshold</strong></td>
+      <td>6.457</td>
+    </tr>
+    <tr>
+      <td><strong>Accuracy</strong></td>
+      <td>0.936</td>
+    </tr>
+    <tr>
+      <td><strong>Recall</strong></td>
+      <td>0.746</td>
+    </tr>
+    <tr>
+      <td><strong>Precision</strong></td>
+      <td>0.688</td>
+    </tr>
+    <tr>
+      <td><strong>MCC</strong></td>
+      <td>0.680</td>
+    </tr>
+    <tr>
+      <td><strong>Overall CV F1</strong></td>
+      <td>0.716</td>
+    </tr>
+  </tbody>
+</table>
 
