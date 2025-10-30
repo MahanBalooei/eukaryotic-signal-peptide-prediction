@@ -4,7 +4,7 @@ import requests
 from io import StringIO
 from Bio import SeqIO
 from collections import Counter
-from sklearn.metrics import precision_recall_curve, f1_score, roc_curve, auc
+from sklearn.metrics import precision_recall_curve, f1_score, roc_curve, auc, accuracy_score, recall_score, precision_score, matthews_corrcoef
 import matplotlib.pyplot as plt
 
 # --- Fetch UniProt sequences ---
@@ -99,7 +99,7 @@ def predict_sp_score(seq, log_odds, min_cleavage=15, max_cleavage=100):
         scores.append(score)
     return max(scores) if scores else float('-inf')
 
-# --- Cross-validation with PR + ROC ---
+# --- Cross-validation with all metrics ---
 def run_cross_validation(df):
     folds = sorted(df['fold'].unique())
     all_scores = []
@@ -130,8 +130,19 @@ def run_cross_validation(df):
     avg_thresh = np.mean(thresholds)
     preds = (np.array(all_scores) > avg_thresh).astype(int)
     overall_f1 = f1_score(all_labels, preds)
-    print(f"Average threshold: {avg_thresh:.3f}")
-    print(f"Overall CV F1: {overall_f1:.3f}")
+    accuracy = accuracy_score(all_labels, preds)
+    recall = recall_score(all_labels, preds)
+    precision = precision_score(all_labels, preds)
+    mcc = matthews_corrcoef(all_labels, preds)
+    
+    # Create table with metrics
+    metrics_data = {
+        'Metric': ['Accuracy', 'Recall', 'Precision', 'MCC', 'Threshold', 'F1 Score'],
+        'Value': [f"{accuracy:.3f}", f"{recall:.3f}", f"{precision:.3f}", f"{mcc:.3f}", f"{avg_thresh:.3f}", f"{overall_f1:.3f}"]
+    }
+    metrics_df = pd.DataFrame(metrics_data)
+    print("\nCross-Validation Metrics Table:")
+    print(metrics_df.to_string(index=False))
 
     # --- PR Curve ---
     prec, rec, _ = precision_recall_curve(all_labels, all_scores)
