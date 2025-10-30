@@ -63,14 +63,14 @@ python Heatmap.py
 
 ### Thresholding
 - Per-fold: Optimize threshold on PR curve to maximize F1-score.
-- Overall: Use average threshold for final predictions.
-Fold 0: Trained on 699, Best thresh=6.195, F1=0.719/
-Fold 1: Trained on 699, Best thresh=6.495, F1=0.714/
-Fold 2: Trained on 699, Best thresh=6.809, F1=0.698/
-Fold 3: Trained on 699, Best thresh=6.461, F1=0.734/
-Fold 4: Trained on 696, Best thresh=6.325, F1=0.768/
-Average threshold: 6.457
-
+- Description,Details
+Overall,Use average threshold for final predictions.
+Fold 0,"Trained on 699, Best thresh=6.195, F1=0.719"
+Fold 1,"Trained on 699, Best thresh=6.495, F1=0.714"
+Fold 2,"Trained on 699, Best thresh=6.809, F1=0.698"
+Fold 3,"Trained on 699, Best thresh=6.461, F1=0.734"
+Fold 4,"Trained on 696, Best thresh=6.325, F1=0.768"
+Average threshold,6.457
 ## Results
 
 <table align="center">
