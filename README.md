@@ -26,12 +26,12 @@ This pipeline:
 
 ```
 .
-├── data_collection/          # Step 1 — UniProtKB retrieval and filtering
-├── data_preparation/         # Step 2 — MMseqs2 clustering, splits, CV folds
-├── data_analysis/            # Step 3 — Exploratory analysis and visualizations
-├── von_heijne_method/        # Step 4 — PSWM baseline classifier
-├── SVM_spselection/          # Step 5 — SVM with feature selection
-└── deep_learning/            # Step 6 — CNN-LSTM on ESM-2 embeddings
+├── 1- Data_Collection/      # Step 1 — UniProtKB retrieval and filtering
+├── 2- Data_Prepration/       # Step 2 — MMseqs2 clustering, splits, CV folds
+├── 3- Data_analysis/         # Step 3 — Exploratory analysis and visualizations
+├── 4- vonHeijne_method/      # Step 4 — PSWM baseline classifier
+├── 5- SVM-SPSelection/       # Step 5 — SVM with feature selection
+└── 6- Deep_learning/         # Step 6 — CNN-LSTM on ESM-2 embeddings
 ```
 
 Each folder contains its own `README.md` with detailed documentation, a Jupyter notebook, and all outputs (figures, TSVs, saved models).
@@ -40,7 +40,7 @@ Each folder contains its own `README.md` with detailed documentation, a Jupyter 
 
 ## Folder Guide
 
-### `data_collection/`
+### [`1- Data_Collection/`](./1-%20Data_Collection/README.md)
 **Notebook:** `DataCollection.ipynb`
 
 Retrieves eukaryotic proteins from UniProtKB via REST API and applies strict experimental evidence filters to produce two labeled sets.
@@ -54,7 +54,7 @@ Retrieves eukaryotic proteins from UniProtKB via REST API and applies strict exp
 
 ---
 
-### `data_preparation/`
+### [`2- Data_Prepration/`](./2-%20Data_Prepration/README.md)
 **Notebook:** `step2_data_preparation.ipynb`
 
 Removes redundant sequences and constructs train/benchmark splits with cross-validation fold assignments.
@@ -75,7 +75,7 @@ Removes redundant sequences and constructs train/benchmark splits with cross-val
 
 ---
 
-### `data_analysis/`
+### [`3- Data_analysis/`](./3-%20Data_analysis/README.md)
 **Notebook:** `step3_data_analysis.ipynb`
 
 Exploratory analysis performed on the full dataset (train + benchmark) before any model is trained.
@@ -88,11 +88,11 @@ Exploratory analysis performed on the full dataset (train + benchmark) before an
 | `04_kingdom_distribution` | Both sets dominated by Metazoa; different kingdom proportions noted as potential bias |
 | `05_cleavage_site_logo` | Strong Ala conservation at −1 and −3 confirms the von Heijne −1/−3 rule |
 
-All figures saved as PNG and PDF in `data_analysis/figures/`.
+All figures are exported as both PNG and PDF inside `3- Data_analysis/`.
 
 ---
 
-### `von_heijne_method/`
+### [`4- vonHeijne_method/`](./4-%20vonHeijne_method/README.md)
 **Notebook:** `step4_von_heijne.ipynb`
 
 Classical PSWM-based classifier. Serves as an interpretable rule-based baseline.
@@ -111,7 +111,7 @@ Benchmark confusion matrix: TP=158, FP=96, TN=1691, FN=61
 
 ---
 
-### `SVM_spselection/`
+### [`5- SVM-SPSelection/`](./5-%20SVM-SPSelection/README.md)
 **Notebook:** `step5_svm.ipynb`
 
 SVM classifier on 28 biochemical features extracted from each protein's N-terminal region, with feature selection via Random Forest importance.
@@ -132,7 +132,7 @@ Top features by importance: `max_tm_propensity`, `max_hydrophobicity`, `avg_hydr
 
 ---
 
-### `deep_learning/`
+### [`6- Deep_learning/`](./6-%20Deep_learning/README.md)
 **Notebook:** `step6_deep_learning.ipynb`
 
 CNN-LSTM model trained on ESM-2 protein language model embeddings. Best-performing method in the project.
@@ -176,8 +176,8 @@ Each method was trained on identical data splits and evaluated on the same held-
 
 All notebooks are designed to run in **Google Colab**. Follow the steps in order:
 
-1. Run `data_collection/DataCollection.ipynb` → produces `positive/negative .fasta/.tsv`
-2. Upload outputs to `data_preparation/step2_data_preparation.ipynb` → produces training and benchmark TSVs
+1. Run `1- Data_Collection/DataCollection.ipynb` → produces `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
+2. Upload outputs to `2- Data_Prepration/step2_data_preparation.ipynb` → produces training and benchmark TSVs
 3. Upload TSVs + FASTA to subsequent notebooks (steps 3–6), each of which documents its required inputs
 
 Each notebook installs its own dependencies via `pip` and `apt-get`. Required uploads are listed in the **Input Files** section of each folder's `README.md`.
@@ -203,6 +203,6 @@ Full dependency lists are in each folder's `README.md`.
 
 ## Data Source
 
-All sequences retrieved from **UniProtKB / Swiss-Prot** via the [UniProt REST API](https://rest.uniprot.org).  
-Amino acid background frequencies from **ExPASy SwissProt release statistics**: https://web.expasy.org/docs/relnotes/relstat.html  
-ESM-2 model from **Meta AI / fair-esm**: https://github.com/facebookresearch/esm
+- **UniProtKB / Swiss-Prot REST API:** <https://rest.uniprot.org>
+- **Swiss-Prot release statistics (ExPASy):** <https://web.expasy.org/docs/relnotes/relstat.html>
+- **ESM-2 repository (Meta AI):** <https://github.com/facebookresearch/esm>
