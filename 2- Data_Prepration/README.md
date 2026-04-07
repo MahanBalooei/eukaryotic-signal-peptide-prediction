@@ -1,85 +1,92 @@
-# Data Preparation
+# Step 2 — Data Preparation
 
-This folder contains the pipeline that takes raw UniProtKB sequences from the data collection step and produces clean, non-redundant, labeled datasets ready for model training and final evaluation.
+**LB2 Project · Group 7 · Signal Peptide Prediction**
+
+This folder takes the raw positive and negative datasets from Step 1 and produces clean, non-redundant, labeled datasets ready for model training and final evaluation.
 
 ---
 
 ## Contents
 
-| File | Description |
-|------|-------------|
-| `step2_data_preparation.ipynb` | Full pipeline: clustering, filtering, labeling, splitting, fold assignment |
-| `filtered_positive.tsv` | Post-clustering positive sequences (1,093 entries) |
-| `filtered_negative.tsv` | Post-clustering negative sequences (8,934 entries) |
-| `training_with_folds.tsv` | 80% training split with 5-fold CV labels (8,021 entries) |
-| `benchmarking_set.tsv` | 20% held-out benchmark split (2,006 entries) |
+| File                        | Description |
+|-----------------------------|-------------|
+| `step2_data_preparation.ipynb` | Full pipeline: MMseqs2 clustering, metadata filtering, labeling, 80/20 split, and 5-fold CV assignment |
+| `filtered_positive.tsv`     | Positive cluster representatives with metadata (1,093 entries) |
+| `filtered_negative.tsv`     | Negative cluster representatives with metadata (8,934 entries) |
+| `training_with_folds.tsv`   | Training set (80 %) with `label` and `fold` columns (8,021 entries) |
+| `benchmarking_set.tsv`      | Held-out benchmark set (20 %) with `label` column — **never used during training** (2,006 entries) |
 
 ---
 
 ## Pipeline Overview
 
-### Step 1 — Redundancy removal (MMseqs2)
-Positive and negative FASTA files are independently clustered using MMseqs2 `easy-cluster`. One representative sequence is kept per cluster.
+1. **Redundancy removal (MMseqs2)** — Independent clustering of positive and negative sequences (`easy-cluster`).
+2. **TSV filtering** — Keep only cluster representatives in the metadata files.
+3. **Labeling** — Add binary `label` column (`1` = SP-positive, `0` = SP-negative).
+4. **Stratified 80/20 split** — Performed **within each class** to preserve class ratio. Benchmark set is held out completely.
+5. **5-fold cross-validation** — Assigned only to the training set, stratified by label.
 
-| Parameter | Value | Meaning |
-|-----------|-------|---------|
-| `--min-seq-id` | 0.3 | Minimum 30% sequence identity |
-| `-c` | 0.4 | Minimum 40% coverage |
-| `--cov-mode` | 0 | Coverage over both query and target |
-| `--cluster-mode` | 1 | Connected-component clustering |
+**Reproducibility:** All random operations use `RANDOM_SEED = 42`.
 
-### Step 2 — TSV filtering
-TSV metadata rows are filtered to retain only the accessions selected as cluster representatives. Consistency between FASTA and TSV is enforced with assertions.
+---
 
-### Step 3 — Labeling
-Binary labels are added to the merged dataset: `1` = signal peptide present, `0` = signal peptide absent.
+## MMseqs2 Clustering Parameters
 
-### Step 4 — Stratified 80/20 split
-The dataset is split into training (80%) and benchmark (20%) sets **within each class separately**, preserving the positive/negative ratio in both halves. The benchmark set is held out completely and used only once at final evaluation.
-
-### Step 5 — 5-fold cross-validation assignment
-Each training sequence is assigned a fold number (0–4), stratified by label. In each CV round, fold `k` serves as the validation set; the remaining four folds are used for training. Fold assignment uses `numpy.array_split`, which distributes remainder rows evenly across folds.
-
-> **Reproducibility:** All shuffles and splits use `RANDOM_SEED = 42`. Do not change this value.
+| Parameter      | Value | Meaning |
+|----------------|-------|---------|
+| `--min-seq-id` | 0.3   | Minimum 30 % sequence identity |
+| `-c`           | 0.4   | Minimum 40 % coverage |
+| `--cov-mode`   | 0     | Coverage over both query and target |
+| `--cluster-mode` | 1   | Connected-component clustering |
 
 ---
 
 ## Output Format
 
-All output TSV files share a common base schema, with additional columns depending on the file:
+All TSV files share the same base columns plus extra fields:
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `Accession` | str | UniProt accession |
-| `Organism` | str | Source organism |
-| `Kingdom` | str | Metazoa / Viridiplantae / Fungi / Other |
-| `Sequence length` | int | Full sequence length in residues |
-| `SP cleavage` | int / NaN | Cleavage site position (positive only) |
-| `N-term transmembrane` | bool | N-terminal TM flag (negative only) |
-| `label` | int | `1` = SP-positive, `0` = SP-negative |
-| `fold` | int | CV fold (0–4); present in `training_with_folds.tsv` only |
+| Column                | Description |
+|-----------------------|-------------|
+| `Accession`           | UniProt accession |
+| `Organism`            | Source organism |
+| `Kingdom`             | Metazoa / Viridiplantae / Fungi / Other |
+| `Sequence length`     | Full protein length |
+| `SP cleavage`         | Cleavage site (positive only) |
+| `N-term transmembrane`| N-terminal TM helix flag (negative only) |
+| `label`               | `1` = SP-positive, `0` = SP-negative |
+| `fold`                | CV fold (0–4) — only in `training_with_folds.tsv` |
 
 ---
 
 ## Dataset Statistics
 
-| Step | Positive | Negative | Total |
-|------|----------|----------|-------|
-| Raw (from data collection) | 2,932 | 20,615 | 23,547 |
-| After MMseqs2 clustering | 1,093 | 8,934 | 10,027 |
-| Training set (80%) | ~874 | ~7,147 | 8,021 |
-| Benchmark set (20%) | ~219 | ~1,787 | 2,006 |
+| Step                          | Positive | Negative | Total  |
+|-------------------------------|----------|----------|--------|
+| Raw (from Step 1)             | 2,932    | 20,615   | 23,547 |
+| After MMseqs2 clustering      | **1,093**| **8,934**| 10,027 |
+| Training set (80 %)           | 874      | 7,147    | **8,021** |
+| Benchmarking set (20 %)       | 219      | 1,787    | **2,006** |
 
-Class imbalance ratio: ~8 negatives per positive.
+Class imbalance ≈ 8.2 negatives per positive.
 
 ---
 
-## Dependencies
+## How to Run
 
+1. Upload the four files from the **Data Collection** folder:
+   - `positive.fasta`, `negative.fasta`
+   - `positive.tsv`, `negative.tsv`
+2. Run `step2_data_preparation.ipynb` in Google Colab.
+3. All output files will be generated automatically.
+
+**Next step:** Proceed to the deep learning notebook (`step6_deep_learning_latest_version_negin.ipynb`).
+
+---
+
+**Dependencies**
 - Python 3.x
-- `mmseqs2` (installed via `apt-get` in Colab)
+- `mmseqs2` (installed via `apt-get`)
 - `biopython`
-- `pandas`
-- `numpy`
+- `pandas`, `numpy`
 
-Run `step2_data_preparation.ipynb` in Google Colab. Upload `positive.fasta`, `negative.fasta`, `positive.tsv`, and `negative.tsv` from the `data_collection` folder before executing.
+Ready for model training!
