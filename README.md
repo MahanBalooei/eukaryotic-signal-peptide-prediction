@@ -27,7 +27,7 @@ This pipeline:
 ```
 .
 ├── 1- Data_Collection/      # Step 1 — UniProtKB retrieval and filtering
-├── 2- Data_Prepration/       # Step 2 — MMseqs2 clustering, splits, CV folds
+├── 2- Data_Preparation/       # Step 2 — MMseqs2 clustering, splits, CV folds
 ├── 3- Data_analysis/         # Step 3 — Exploratory analysis and visualizations
 ├── 4- vonHeijne_method/      # Step 4 — PSWM baseline classifier
 ├── 5- SVM-SPSelection/       # Step 5 — SVM with feature selection
@@ -54,7 +54,7 @@ Retrieves eukaryotic proteins from UniProtKB via REST API and applies strict exp
 
 ---
 
-### [`2- Data_Prepration/`](./2-%20Data_Prepration/README.md)
+### [`2- Data_Preparation/`](./2-%20Data_Preparation/README.md)
 **Notebook:** `step2_data_preparation.ipynb`
 
 Removes redundant sequences and constructs train/benchmark splits with cross-validation fold assignments.
@@ -177,7 +177,7 @@ Each method was trained on identical data splits and evaluated on the same held-
 All notebooks are designed to run in **Google Colab**. Follow the steps in order:
 
 1. Run `1- Data_Collection/DataCollection.ipynb` → produces `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
-2. Upload outputs to `2- Data_Prepration/step2_data_preparation.ipynb` → produces training and benchmark TSVs
+2. Upload outputs to `2- Data_Preparation/step2_data_preparation.ipynb` → produces training and benchmark TSVs
 3. Upload TSVs + FASTA to subsequent notebooks (steps 3–6), each of which documents its required inputs
 
 Each notebook installs its own dependencies via `pip` and `apt-get`. Required uploads are listed in the **Input Files** section of each folder's `README.md`.
