@@ -156,8 +156,7 @@ CNN-LSTM model trained on ESM-2 protein language model embeddings. Best-performi
 
 Benchmark confusion matrix: TP=214, FP=13, TN=1793, FN=6
 
-**Saved model:** `deep_learning/cnn_signal_peptide_model.pt`
-
+**Saved model:** `6- Deep_learning/cnn_signal_peptide_model.pt`
 ---
 
 ## Full Model Comparison (Blind Benchmark, n=2,006)
