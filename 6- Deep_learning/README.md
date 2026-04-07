@@ -123,10 +123,10 @@ model.eval()
 
 Upload the following to Colab before running:
 
-- `training_with_folds.tsv` — from `data_preparation/`
-- `benchmarking_set.tsv` — from `data_preparation/`
-- `positive.fasta` — from `data_collection/`
-- `negative.fasta` — from `data_collection/`
+- `training_with_folds.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `benchmarking_set.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `positive.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
+- `negative.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 
 ---
 

@@ -45,7 +45,7 @@ Extracts a 15-residue window (positions −13 to +2 relative to the cleavage sit
 | `logomaker` | Sequence logo from information-content matrix |
 | `biopython` (`SeqIO`) | FASTA parsing for sequence extraction |
 
-All figures are saved in both PNG (screen) and PDF (publication) formats to `figures/`.
+All figures are saved in both PNG (screen) and PDF (publication) formats in this folder (`3- Data_analysis/`).
 
 ---
 
@@ -53,10 +53,10 @@ All figures are saved in both PNG (screen) and PDF (publication) formats to `fig
 
 Upload the following files to Colab before running the notebook:
 
-- `training_with_folds.tsv` — from `data_preparation/`
-- `benchmarking_set.tsv` — from `data_preparation/`
-- `positive.fasta` — from `data_collection/`
-- `negative.fasta` — from `data_collection/`
+- `training_with_folds.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `benchmarking_set.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `positive.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
+- `negative.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 
 ---
 
