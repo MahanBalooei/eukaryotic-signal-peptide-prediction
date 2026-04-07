@@ -26,12 +26,12 @@ This pipeline:
 
 ```
 .
-├── 1- Data_Collection/      # Step 1 — UniProtKB retrieval and filtering
+├── 1- Data_Collection/        # Step 1 — UniProtKB retrieval and filtering
 ├── 2- Data_Preparation/       # Step 2 — MMseqs2 clustering, splits, CV folds
-├── 3- Data_analysis/         # Step 3 — Exploratory analysis and visualizations
-├── 4- vonHeijne_method/      # Step 4 — PSWM baseline classifier
-├── 5- SVM-SPSelection/       # Step 5 — SVM with feature selection
-└── 6- Deep_learning/         # Step 6 — CNN-LSTM on ESM-2 embeddings
+├── 3- Data_analysis/          # Step 3 — Exploratory analysis and visualizations
+├── 4- vonHeijne_method/       # Step 4 — PSWM baseline classifier
+├── 5- SVM-SPSelection/        # Step 5 — SVM with feature selection
+└── 6- Deep_learning/          # Step 6 — CNN-LSTM on ESM-2 embeddings
 ```
 
 Each folder contains its own `README.md` with detailed documentation, a Jupyter notebook, and all outputs (figures, TSVs, saved models).
