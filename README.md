@@ -41,7 +41,7 @@ Each folder contains its own `README.md` with detailed documentation, a Jupyter 
 ## Folder Guide
 
 ### [`1- Data_Collection/`](./1-%20Data_Collection/README.md)
-**Notebook:** `DataCollection.ipynb`
+**Notebook:** `step1_data_collection.ipynb`
 
 Retrieves eukaryotic proteins from UniProtKB via REST API and applies strict experimental evidence filters to produce two labeled sets.
 
