@@ -107,7 +107,7 @@ Classical PSWM-based classifier. Serves as an interpretable rule-based baseline.
 | PR-AUC | 0.782 |
 | F1 | 0.708 |
 
-Benchmark confusion matrix: TP=158, FP=96, TN=1691, FN=61
+Benchmark confusion matrix: TP=157, FP=94, TN=1693, FN=62
 
 ---
 
@@ -124,16 +124,16 @@ Top features by importance: `max_tm_propensity`, `max_hydrophobicity`, `avg_hydr
 
 | Metric | 5-Fold CV (all 28) | Benchmark (all 28) | Benchmark (top 20) |
 |--------|--------------------|--------------------|---------------------|
-| ROC-AUC | 0.985 | — | — |
-| PR-AUC | 0.911 | — | — |
-| F1 | 0.877 | — | — |
-| TP | — | 190 | 194 |
-| FP | — | 28 | 31 |
+| ROC-AUC | 0.986 | — | — |
+| PR-AUC | 0.918 | — | — |
+| F1 | 0.868 | — | — |
+| TP | — | 190 | 188 |
+| FP | — | 28 | 29 |
 
 ---
 
 ### [`6- Deep_learning/`](./6-%20Deep_learning/README.md)
-**Notebook:** `step6_deep_learning.ipynb`
+**Notebook:** `step6_deep_learning_final3_fixed.ipynb`
 
 CNN-LSTM model trained on ESM-2 protein language model embeddings. Best-performing method in the project.
 
@@ -147,14 +147,14 @@ CNN-LSTM model trained on ESM-2 protein language model embeddings. Best-performi
 
 | Metric | 5-Fold CV (mean ± std) | Benchmark |
 |--------|------------------------|-----------|
-| Precision | 0.971 ± 0.015 | 0.943 |
-| Recall | 0.982 ± 0.013 | 0.973 |
-| F1 | 0.976 ± 0.007 | 0.957 |
-| MCC | 0.973 ± 0.007 | 0.952 |
-| PR-AUC | 0.978 ± 0.017 | 0.979 |
-| ROC-AUC | 0.997 ± 0.002 | 0.998 |
+| Precision | 0.976 ± 0.014 | 0.951 |
+| Recall | 0.974 ± 0.009 | 0.973 |
+| F1 | 0.975 ± 0.006 | 0.962 |
+| MCC | 0.972 ± 0.007 | 0.957 |
+| PR-AUC | 0.980 ± 0.009 | 0.984 |
+| ROC-AUC | 0.996 ± 0.001 | 0.998 |
 
-Benchmark confusion matrix: TP=214, FP=13, TN=1793, FN=6
+Benchmark confusion matrix: TP=213, FP=11, TN=1776, FN=6
 
 **Saved model:** `deep_learning/cnn_signal_peptide_model.pt`
 
@@ -164,9 +164,9 @@ Benchmark confusion matrix: TP=214, FP=13, TN=1793, FN=6
 
 | Model | Precision | Recall | F1 | MCC | PR-AUC | ROC-AUC |
 |-------|-----------|--------|----|-----|--------|---------|
-| Von Heijne (PSWM) | 0.62 | 0.72 | 0.67 | 0.64 | 0.782 | 0.954 |
-| SVM (20 features) | 0.86 | 0.89 | 0.87 | 0.84 | 0.911 | 0.985 |
-| **CNN-LSTM (ESM-2)** | **0.943** | **0.973** | **0.957** | **0.952** | **0.979** | **0.998** |
+| Von Heijne (PSWM) | 0.62 | 0.72 | 0.67 | 0.63 | 0.782 | 0.954 |
+| SVM (20 features) | 0.87 | 0.86 | 0.86 | 0.85 | 0.918 | 0.986 |
+| **CNN-LSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** | **0.984** | **0.998** |
 
 Each method was trained on identical data splits and evaluated on the same held-out benchmark set, enabling direct comparison.
 
