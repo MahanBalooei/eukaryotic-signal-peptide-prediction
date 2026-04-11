@@ -148,6 +148,17 @@ The CNN blocks handle local motif detection — the kind of positional patterns 
 **Final model retraining:** after CV, the model is retrained on the full training set for the average best epoch across the 5 folds. This avoids needing to use the benchmark set for any training decision while still leveraging the full data.
 
 ---
+## Design Notes
+
+**Why ESM-2 instead of one-hot encoding?** One-hot encodings treat each amino acid independently and carry no evolutionary context. ESM-2 embeddings encode rich co-evolutionary and structural information learned from millions of sequences, allowing the downstream CNN+LSTM to focus on higher-level patterns rather than raw amino acid identity. The performance jump from SVM to this model reflects exactly that difference.
+
+**Why N-terminal truncation at 150 aa?** Signal peptides are N-terminal sequences, typically 16–30 residues long. Truncating at 150 aa keeps the model focused on the relevant region, reduces the ESM embedding cost considerably, and avoids diluting the signal with unrelated C-terminal content.
+
+**Why class-weighted loss?** With ~8:1 negative-to-positive imbalance, an unweighted loss would incentivise the model to predict SP− almost always. The `pos_weight` correction restores balance in the gradient signal without requiring any resampling of the dataset.
+
+**Legacy one-hot encoding functions** are retained in Cell 5 of the notebook for reference but are not called in the pipeline. They represent the original baseline approach and are kept for transparency.
+
+---
 
 ## Results
 
@@ -251,23 +262,8 @@ To run inference, precompute ESM-2 embeddings for your sequences (N-terminal 150
 
 ---
 
-## Design Notes
-
-**Why ESM-2 instead of one-hot encoding?** One-hot encodings treat each amino acid independently and carry no evolutionary context. ESM-2 embeddings encode rich co-evolutionary and structural information learned from millions of sequences, allowing the downstream CNN+LSTM to focus on higher-level patterns rather than raw amino acid identity. The performance jump from SVM to this model reflects exactly that difference.
-
-**Why N-terminal truncation at 150 aa?** Signal peptides are N-terminal sequences, typically 16–30 residues long. Truncating at 150 aa keeps the model focused on the relevant region, reduces the ESM embedding cost considerably, and avoids diluting the signal with unrelated C-terminal content.
-
-**Why class-weighted loss?** With ~8:1 negative-to-positive imbalance, an unweighted loss would incentivise the model to predict SP− almost always. The `pos_weight` correction restores balance in the gradient signal without requiring any resampling of the dataset.
-
-**Legacy one-hot encoding functions** are retained in Cell 5 of the notebook for reference but are not called in the pipeline. They represent the original baseline approach and are kept for transparency.
-
----
 
 ## Notes on Reproducibility
 
 All random seeds are fixed at `SEED=42` across Python `random`, NumPy, and PyTorch (including CUDA). `cudnn.deterministic=True` and `cudnn.benchmark=False` suppress non-deterministic cuDNN operations. Results may differ marginally across different hardware or CUDA versions due to floating-point non-determinism in certain CUDA kernels, but differences should be negligible in practice.
 
----
-
-*Part of the LB2 Signal Peptide Prediction Pipeline — Group 7*
-*Steps: 1 Data Collection → 2 Data Preparation → 3 Exploratory Analysis → 4 Von Heijne Baseline → 5 SVM Classifier → **6 Deep Learning Classifier***
