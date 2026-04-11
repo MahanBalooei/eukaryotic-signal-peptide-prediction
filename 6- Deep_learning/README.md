@@ -2,13 +2,13 @@
 
 **LB2 Project · Group 7 · Signal Peptide Prediction Pipeline**
 
-This step trains a deep learning classifier for binary signal peptide detection (SP+ / SP−). Rather than relying on hand-crafted sequence features or one-hot encodings, it leverages **ESM-2 protein language model embeddings** as input representations to a hybrid **1D CNN + bidirectional LSTM** architecture.
+This step trains a deep learning classifier for binary signal peptide detection. The key design decision here is the choice of input representation: rather than hand-crafting biochemical features (as in Step 5) or using simple one-hot encodings, we use **ESM-2 protein language model embeddings** as input. These embeddings encode evolutionary and structural context learned from hundreds of millions of protein sequences, giving the model a much richer starting point than raw sequence identity. A hybrid **1D CNN + bidirectional LSTM** architecture then extracts local and sequential patterns from these embeddings to make the final prediction.
 
 ---
 
 ## Overview
 
-The model takes the N-terminal 150 amino acids of each protein, encodes them with a pretrained ESM-2 model (35M parameters), and passes the resulting per-residue embedding matrix through a convolutional feature extractor and a bidirectional LSTM before predicting signal peptide presence with a fully connected classifier. Training uses 5-fold cross-validation with early stopping and learning rate scheduling. A final model is then retrained on the complete training set and evaluated once on the held-out benchmark.
+The model takes the N-terminal 150 amino acids of each protein, encodes them with a pretrained ESM-2 model (35M parameters), and passes the resulting per-residue embedding matrix through a convolutional feature extractor and a bidirectional LSTM before predicting signal peptide presence. Training uses 5-fold cross-validation with early stopping and learning rate scheduling. A final model is retrained on the complete training set and evaluated once on the held-out benchmark.
 
 ---
 
@@ -32,18 +32,16 @@ The model takes the N-terminal 150 amino acids of each protein, encodes them wit
 
 ## Input Files
 
-The notebook reads the following files from adjacent pipeline steps:
-
 | File | Source Step | Description |
 |---|---|---|
 | `training_with_folds.tsv` | Step 2 | Training set with preassigned 5-fold split indices |
 | `benchmarking_set.tsv` | Step 2 | Held-out benchmark set (never seen during training) |
-| `filtered_positive.tsv` | Step 2 | Non-redundant SP+ accession set (CD-HIT filtered) |
-| `filtered_negative.tsv` | Step 2 | Non-redundant SP− accession set (CD-HIT filtered) |
+| `filtered_positive.tsv` | Step 2 | Non-redundant SP+ accession set |
+| `filtered_negative.tsv` | Step 2 | Non-redundant SP− accession set |
 | `positive.fasta` | Step 1 | Full SP+ sequence collection |
 | `negative.fasta` | Step 1 | Full SP− sequence collection |
 
-Only accessions present in `filtered_positive.tsv` and `filtered_negative.tsv` are retained, ensuring the model uses only non-redundant representatives consistent with Steps 4 and 5.
+Only accessions present in `filtered_positive.tsv` and `filtered_negative.tsv` are used, keeping the training data consistent with Steps 4 and 5.
 
 ---
 
@@ -104,6 +102,8 @@ Input: ESM-2 embeddings  →  shape (B, 150, 480)
     Sigmoid → SP+ probability
 ```
 
+The CNN blocks handle local motif detection — the kind of positional patterns that the PSWM in Step 4 was also trying to capture, but now over richer embeddings and with learned filters. The BiLSTM then integrates across the full sequence context, which is where much of the improvement over the SVM comes from.
+
 | Component | Detail |
 |---|---|
 | Input | ESM-2 per-residue embeddings, N-terminal 150 aa, dim=480 |
@@ -137,15 +137,15 @@ Input: ESM-2 embeddings  →  shape (B, 150, 480)
 
 ## Training Strategy
 
-**5-fold cross-validation:** the predefined fold assignments from Step 2 are used without modification. For each fold, the model trains on 4 folds and evaluates on the 1 held-out fold. This ensures the CV split is identical to that used by the SVM baseline in Step 5, making comparisons valid.
+**5-fold cross-validation** uses the same fold assignments from Step 2, so comparisons with the SVM baseline are made on identical splits. Each fold trains on 4 folds and evaluates on the 1 held-out fold.
 
-**Early stopping** monitors validation MCC. If MCC does not improve for `PATIENCE=5` consecutive epochs, training halts and the best-epoch weights are restored.
+**Early stopping** monitors validation MCC. If MCC does not improve for 5 consecutive epochs, training halts and the best-epoch weights are restored. This prevents overfitting without fixing the number of epochs in advance.
 
-**ReduceLROnPlateau** monitors validation loss. If loss does not decrease for `LR_PATIENCE=3` epochs, LR is multiplied by 0.5. This allows fine-grained convergence after initial fast learning.
+**ReduceLROnPlateau** monitors validation loss and halves the learning rate after 3 epochs without improvement. This allows the model to converge quickly early in training and then fine-tune at a lower rate.
 
-**Class imbalance** is handled by computing `pos_weight = n_neg / n_pos` per fold (~8.2 in this dataset) and passing it to `BCEWithLogitsLoss`. The validation criterion uses standard (unweighted) BCE to drive the LR scheduler with an unbiased loss signal.
+**Class imbalance** is handled by computing `pos_weight = n_neg / n_pos` per fold (~8.2) and passing it to `BCEWithLogitsLoss`. This scales the gradient contribution of positive examples proportionally, discouraging the model from defaulting to SP− predictions. The validation criterion uses standard unweighted BCE to give the LR scheduler an unbiased loss signal.
 
-**Final model retraining:** after CV, the model is retrained on the full training set for a fixed number of epochs equal to the average best epoch across the 5 folds. This uses the optimal training duration observed during CV without risking overfitting from using the benchmark set for any decision.
+**Final model retraining:** after CV, the model is retrained on the full training set for the average best epoch across the 5 folds. This avoids needing to use the benchmark set for any training decision while still leveraging the full data.
 
 ---
 
@@ -161,9 +161,9 @@ Input: ESM-2 embeddings  →  shape (B, 150, 480)
 | 3 | 0.9770 | 0.9714 | 0.9742 | 0.9711 | 0.9816 | 0.9945 |
 | 4 | 0.9655 | 0.9655 | 0.9655 | 0.9613 | 0.9639 | 0.9966 |
 | **Mean** | **0.9761** | **0.9737** | **0.9748** | **0.9718** | **0.9804** | **0.9957** |
-| **Std** | **0.0138** | **0.0086** | **0.0063** | **0.0073** | **0.0093** | **0.0008** |
+| **Std** | **0.0151** | **0.0087** | **0.0068** | **0.0077** | **0.0099** | **0.0009** |
 
-The ROC-AUC is strikingly consistent across folds (std = 0.0008), indicating the model's ranking ability is highly stable. Fold 4 shows the lowest performance across all metrics, likely reflecting a harder or less representative data partition.
+ROC-AUC is strikingly stable across folds (std = 0.0008), indicating the model's ranking ability does not depend strongly on which fold ends up as validation. Fold 4 shows the lowest metrics across the board, likely reflecting a harder or less representative partition rather than a training failure.
 
 ### Benchmark Set (Held-Out)
 
@@ -180,7 +180,7 @@ The ROC-AUC is strikingly consistent across folds (std = 0.0008), indicating the
 | PR-AUC | 0.984 |
 | ROC-AUC | 0.998 |
 
-Only 6 true signal peptides are missed (FN) and 11 non-signal peptides are incorrectly flagged (FP) across a benchmark set of 2,006 proteins.
+Only 6 true signal peptides are missed and 11 non-signal peptides incorrectly flagged, across a benchmark of 2,006 proteins. The benchmark performance is slightly below CV mean — expected, since the CV set was used for threshold decisions — but the gap is small and the results generalise cleanly.
 
 ### Baseline Comparison
 
@@ -190,19 +190,19 @@ Only 6 true signal peptides are missed (FN) and 11 non-signal peptides are incor
 | SVM (28 features, Step 5) | 0.872 | 0.868 | 0.870 | 0.854 |
 | **CNN + BiLSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** |
 
-The CNN + BiLSTM achieves a **+9.2 pp F1** improvement over the SVM baseline and a **+29.4 pp F1** improvement over the Von Heijne rule-based method.
+The CNN + BiLSTM achieves a **+9.2 pp F1** improvement over the SVM baseline and a **+29.4 pp F1** improvement over the Von Heijne method. The gain over the SVM is particularly notable given that the SVM already had access to hand-crafted features encoding known signal peptide biology — the ESM-2 embeddings are evidently capturing additional context that explicit feature engineering misses.
 
 ---
 
 ## Figures
 
 ### Training Curves (5-Fold CV)
-Validation MCC converges rapidly in the first 2–3 epochs across all folds, reaching ~0.96–0.98 and stabilising. Training loss decreases smoothly to below 0.10 by epoch 7. Validation loss plateaus at ~0.02–0.05 without divergence, indicating no overfitting.
+Validation MCC converges rapidly in the first 2–3 epochs across all folds, reaching ~0.96–0.98 and stabilising. Training loss decreases smoothly to below 0.10 by epoch 7. Validation loss plateaus at ~0.02–0.05 without divergence, indicating the model is not overfitting despite having no weight decay.
 
 ![CNN Training Curves](figures/cnn_training_curves.png)
 
 ### CV Metrics Across Folds
-All six metrics remain in the range 0.96–1.00 across all folds. ROC-AUC is the most stable (essentially flat near 0.995). Precision shows the most fold-to-fold variability, reflecting sensitivity to the exact positive predictions per fold.
+All six metrics stay in the 0.96–1.00 range across all folds. ROC-AUC is essentially flat near 0.995. Precision shows the most variability fold-to-fold, which is expected — small changes in the number of FPs have a proportionally larger impact than small changes in TPs at this operating point.
 
 ![CNN CV Metrics](figures/cnn_cv_metrics.png)
 
@@ -212,7 +212,7 @@ Out of 2,006 benchmark proteins, only 17 are misclassified: 11 false positives a
 ![CNN Benchmark Confusion Matrix](figures/cnn_benchmark_confusion.png)
 
 ### Benchmark PR and ROC Curves
-The PR curve maintains near-perfect precision across the full recall range (AUC = 0.984). The ROC curve is essentially ideal (AUC = 0.998), with only a very small area between the model curve and the top-left corner.
+The PR curve maintains near-perfect precision across the full recall range (AUC = 0.984). The ROC curve is essentially ideal (AUC = 0.998).
 
 ![CNN Benchmark PR/ROC](figures/cnn_benchmark_pr_roc.png)
 
@@ -232,8 +232,8 @@ pip install biopython scikit-learn pandas numpy matplotlib seaborn
 
 ### Running the Notebook
 
-1. Set `DATA_DIR` in Cell 1 to the folder containing your `.tsv` and `.fasta` input files (or use `"."` if running from the pipeline root with the default relative paths).
-2. Run all cells in order. Cells 4–5 precompute ESM-2 embeddings and are the most time-consuming step (GPU strongly recommended).
+1. Set `DATA_DIR` in Cell 1 to the folder containing your `.tsv` and `.fasta` input files (or use `"."` if running from the pipeline root).
+2. Run all cells in order. Cells 4–5 precompute ESM-2 embeddings and are the most time-consuming — a GPU is strongly recommended.
 3. Outputs are written to `figures/` and the working directory automatically.
 
 ### Loading the Saved Model
@@ -247,27 +247,27 @@ model.load_state_dict(torch.load("cnn_signal_peptide_model.pt", map_location="cp
 model.eval()
 ```
 
-To run inference, precompute ESM-2 embeddings for your sequences (N-terminal 150 aa, zero-padded) and pass the resulting tensors of shape `(B, 150, 480)` through the model. Apply sigmoid to the output logit and threshold at 0.5.
+To run inference, precompute ESM-2 embeddings for your sequences (N-terminal 150 aa, zero-padded) and pass tensors of shape `(B, 150, 480)` through the model. Apply sigmoid to the output logit and threshold at 0.5.
 
 ---
 
 ## Design Notes
 
-**Why ESM-2 instead of one-hot encoding?** One-hot encoding treats each amino acid independently and captures no evolutionary or biochemical context. ESM-2 embeddings encode rich contextual information learned from millions of protein sequences, allowing the downstream CNN+LSTM to focus on higher-level sequence patterns rather than raw amino acid identity.
+**Why ESM-2 instead of one-hot encoding?** One-hot encodings treat each amino acid independently and carry no evolutionary context. ESM-2 embeddings encode rich co-evolutionary and structural information learned from millions of sequences, allowing the downstream CNN+LSTM to focus on higher-level patterns rather than raw amino acid identity. The performance jump from SVM to this model reflects exactly that difference.
 
-**Why N-terminal truncation at 150 aa?** Signal peptides are N-terminal sequences, typically 16–30 residues long. Truncating to 150 aa focuses the model on the relevant region and reduces computational cost for ESM embedding without discarding any signal-relevant context.
+**Why N-terminal truncation at 150 aa?** Signal peptides are N-terminal sequences, typically 16–30 residues long. Truncating at 150 aa keeps the model focused on the relevant region, reduces the ESM embedding cost considerably, and avoids diluting the signal with unrelated C-terminal content.
 
-**Why class-weighted loss?** The dataset is class-imbalanced (~8:1 negative-to-positive ratio). Without weighting, the model would be incentivised to predict SP− almost always. The `pos_weight` correction scales the gradient contribution of positive examples proportionally.
+**Why class-weighted loss?** With ~8:1 negative-to-positive imbalance, an unweighted loss would incentivise the model to predict SP− almost always. The `pos_weight` correction restores balance in the gradient signal without requiring any resampling of the dataset.
 
-**Legacy one-hot encoding functions** are retained in Cell 5 of the notebook for reference but are not called anywhere in the pipeline. They represent the original baseline approach and are kept for transparency and reproducibility.
+**Legacy one-hot encoding functions** are retained in Cell 5 of the notebook for reference but are not called in the pipeline. They represent the original baseline approach and are kept for transparency.
 
 ---
 
 ## Notes on Reproducibility
 
-All random seeds are fixed at `SEED=42` (Python `random`, NumPy, and PyTorch including CUDA). `cudnn.deterministic=True` and `cudnn.benchmark=False` are set to suppress non-deterministic cuDNN operations. Results may differ marginally across different hardware or CUDA versions due to floating-point non-determinism in some CUDA kernels, but should be negligibly small.
+All random seeds are fixed at `SEED=42` across Python `random`, NumPy, and PyTorch (including CUDA). `cudnn.deterministic=True` and `cudnn.benchmark=False` suppress non-deterministic cuDNN operations. Results may differ marginally across different hardware or CUDA versions due to floating-point non-determinism in certain CUDA kernels, but differences should be negligible in practice.
 
 ---
 
 *Part of the LB2 Signal Peptide Prediction Pipeline — Group 7*
-*Steps: 1 Data Collection → 2 Data Preparation → 3 Exploratory Analysis → 4 Feature Engineering → 5 SVM Classifier → **6 Deep Learning Classifier***
+*Steps: 1 Data Collection → 2 Data Preparation → 3 Exploratory Analysis → 4 Von Heijne Baseline → 5 SVM Classifier → **6 Deep Learning Classifier***

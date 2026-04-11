@@ -1,9 +1,10 @@
 # Step 4 — Von Heijne Signal Peptide Classifier
+
 **LB2 Project · Group 7 · Signal Peptide Prediction**
 
 ## Overview
 
-This folder contains the implementation and results for the Von Heijne method of signal peptide (SP) detection. The classifier uses a Position-Specific Weight Matrix (PSWM) built from log-odds amino acid frequencies around the cleavage site window.
+Before reaching for machine learning, it makes sense to understand how well a classical, interpretable method performs on this dataset. The Von Heijne method is the canonical baseline for signal peptide detection — it uses a Position-Specific Weight Matrix (PSWM) built from known cleavage site windows to score any new sequence. Its simplicity is also its strength: every prediction can be directly traced back to position-specific amino acid preferences, and the PSWM itself is biologically interpretable.
 
 ## Contents
 
@@ -16,11 +17,11 @@ This folder contains the implementation and results for the Von Heijne method of
 
 ## Method
 
-1. **Window extraction** — a 15-position window (positions **−13 to +2** relative to the cleavage site) is extracted from each positive training sequence.
-2. **PSWM construction** — log-odds scores are computed against SwissProt background amino acid frequencies, with pseudocount = 1.0 for smoothing.
-3. **Scoring** — each protein is scored by sliding the PSWM over N-terminal positions 15–100 and taking the maximum score.
-4. **Threshold selection** — 5-fold cross-validation is used; per fold, the threshold maximising F1 on the OOF PR curve is selected. The average OOF threshold (6.339) is then applied to the benchmark set.
-5. **Final model** — retrained on the full training set (873 positive sequences) and evaluated on the blind benchmark set.
+1. **Window extraction** — A 15-position window (positions **−13 to +2** relative to the cleavage site) is extracted from each positive training sequence. This window was chosen based on the sequence logo analysis in Step 3, where conserved positions were concentrated in this range.
+2. **PSWM construction** — Log-odds scores are computed against SwissProt background amino acid frequencies, with pseudocount = 1.0 added to avoid log(0) for rare amino acids at any position.
+3. **Scoring** — Each protein is scored by sliding the PSWM across N-terminal positions 15–100 and taking the maximum score. The upper bound of 100 is generous relative to the typical SP length (~22 aa) but avoids penalising proteins where the annotation does not perfectly match the retrieved sequence start.
+4. **Threshold selection** — We use 5-fold cross-validation to select the classification threshold. For each fold, the threshold that maximises F1 on the out-of-fold (OOF) PR curve is recorded. The average OOF threshold (6.339) is then applied to the benchmark set — a clean separation between threshold selection and final evaluation.
+5. **Final model** — Retrained on the full training set (873 positive sequences) and evaluated once on the blind benchmark.
 
 ## Input Files (from previous steps)
 
@@ -32,7 +33,7 @@ This folder contains the implementation and results for the Von Heijne method of
 | `benchmarking_set.tsv` | Blind benchmark set with label column |
 | `positive.fasta` / `negative.fasta` | Source protein sequences (filtered accessions only) |
 
-> **Note:** All sequences were restricted to the filtered non-redundant set produced in Step 2 before training and evaluation.
+> **Note:** All sequences are restricted to the non-redundant set from Step 2. This is critical — evaluating on sequences that are highly similar to training sequences would artificially inflate performance.
 
 ## Results
 
@@ -57,6 +58,8 @@ This folder contains the implementation and results for the Von Heijne method of
 | F1 | 0.710 | 0.668 |
 | MCC | 0.674 | 0.626 |
 
+The CV–benchmark gap is modest and consistent, suggesting the threshold generalises reasonably well. The relatively low precision (0.625) reflects the difficulty of the problem for a pure positional scoring approach: the PSWM captures local cleavage-site patterns well (ROC-AUC 0.954) but cannot account for broader N-terminal context that distinguishes true signal peptides from superficially similar hydrophobic stretches.
+
 ### Benchmark Confusion Matrix
 
 |  | Predicted SP− | Predicted SP+ |
@@ -68,7 +71,7 @@ This folder contains the implementation and results for the Von Heijne method of
 
 - **PR AUC:** 0.782
 - **ROC AUC:** 0.954
-- OOF threshold point: F1 = 0.710 at recall ≈ 0.74, precision ≈ 0.69
+- OOF operating point: F1 = 0.710 at recall ≈ 0.74, precision ≈ 0.69
 
 ## Dependencies
 

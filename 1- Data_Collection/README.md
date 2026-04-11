@@ -2,7 +2,7 @@
 
 **LB2 Project · Group 7 · Signal Peptide Prediction**
 
-This folder contains all scripts and outputs for building the high-quality labeled dataset used in signal peptide (SP) prediction. Sequences are retrieved programmatically from the UniProt REST API and filtered to produce two clean, high-confidence sets: positive (SP-containing) and negative (SP-absent).
+This folder covers the first step of the pipeline: building a labeled dataset of signal peptide (SP) positive and negative protein sequences. Everything is retrieved programmatically from the UniProt REST API, with filtering baked directly into the query rather than applied post-hoc — this keeps the dataset clean without requiring an extra manual curation pass.
 
 ---
 
@@ -20,16 +20,21 @@ This folder contains all scripts and outputs for building the high-quality label
 
 ## Pipeline Overview
 
-1. **Query UniProt REST API** — Structured search URLs with all filters applied at query time; pagination handled automatically with retry logic (`requests` + `Retry` adapter).
-2. **Parse JSON responses** — Extract accession, organism, kingdom (Metazoa / Viridiplantae / Fungi / Other), sequence length, and SP-specific metadata.
-3. **Filter entries** — Per-entry filter functions enforce strict quality criteria.
-4. **Export** — Valid entries are written simultaneously to TSV (metadata) and FASTA (sequences).
+1. **Query UniProt REST API** — Rather than downloading a bulk dump and filtering locally, we use structured search URLs that apply all filters at query time. Pagination is handled automatically, with a `Retry` adapter to recover gracefully from transient network failures.
+2. **Parse JSON responses** — Each entry is parsed to extract the accession, organism, taxonomic kingdom (Metazoa / Viridiplantae / Fungi / Other), sequence length, and SP-specific annotation fields.
+3. **Filter entries** — Per-entry filter functions enforce the quality criteria described below. Only entries passing all checks are retained.
+4. **Export** — Valid entries are written simultaneously to TSV (metadata) and FASTA (sequences), so both files are always in sync.
 
 ---
 
 ## Filtering Criteria
 
+The filtering strategy is asymmetric by design: the two classes have different biological definitions, so they require different quality checks.
+
 ### Positive set (SP-present)
+
+We restricted the positive set to cases where the signal peptide has been directly confirmed by experiment — not just predicted. This is stricter than many published datasets, but it avoids training the model on annotations that are themselves computational predictions, which would introduce circularity.
+
 - Reviewed (Swiss-Prot) entries only
 - Eukaryota (`taxonomy_id:2759`)
 - Full-length proteins (no fragments)
@@ -39,6 +44,9 @@ This folder contains all scripts and outputs for building the high-quality label
 - SP cleavage site confirmed; mature SP length > 13 residues
 
 ### Negative set (SP-absent)
+
+For the negatives, it is not enough to simply exclude sequences with an SP annotation — some proteins are unannotated by default without actively being confirmed SP-absent. We therefore required experimental localization evidence placing the protein in a compartment incompatible with the secretory pathway.
+
 - Reviewed (Swiss-Prot) entries only
 - Eukaryota (`taxonomy_id:2759`)
 - Full-length proteins (no fragments)
@@ -68,15 +76,15 @@ This folder contains all scripts and outputs for building the high-quality label
 | Positive (SP+)       | 2,949           | **2,932**       |
 | Negative (SP−)       | 20,615          | **20,615**      |
 
-**Note:** UniProt data can change daily. These numbers exactly match the run in `step1_data_collection-2.ipynb`.
+**Note:** UniProt is updated regularly. These numbers reflect the exact run in `step1_data_collection-2.ipynb` and may shift slightly on a fresh run.
 
 ---
 
 ## How to Run
 
-Open `step1_data_collection-2.ipynb` in Google Colab (or any Jupyter environment with internet access). All files (`positive.tsv`, `negative.tsv`, `positive.fasta`, `negative.fasta`) will be generated automatically.
+Open `step1_data_collection-2.ipynb` in Google Colab (or any Jupyter environment with internet access). All four output files will be generated automatically.
 
-**Next step:** Run `data_preparation/step2_data_preparation.ipynb` for MMseqs2 clustering and 80/20 train/benchmark split.
+**Next step:** Run `data_preparation/step2_data_preparation.ipynb` to perform MMseqs2 clustering and the 80/20 train/benchmark split.
 
 ---
 
@@ -84,5 +92,3 @@ Open `step1_data_collection-2.ipynb` in Google Colab (or any Jupyter environment
 - Python 3.x
 - `requests`
 - `pandas`
-
-Ready for the rest of the pipeline!

@@ -1,6 +1,8 @@
-# Data Analysis
+# Step 3 — Data Analysis
 
-This folder contains the exploratory data analysis (EDA) performed on the full labeled dataset (training + benchmark combined) before any model is trained. The goal is to confirm biological coherence, detect taxonomic or compositional biases, and identify sequence features informative for classification.
+**LB2 Project · Group 7 · Signal Peptide Prediction**
+
+Before training any model, it is worth asking: does the dataset actually look like what we think it should look like biologically? This step performs exploratory data analysis (EDA) on the full labeled dataset (training + benchmark combined) to verify biological coherence, flag potential biases, and identify which sequence features are likely to be informative for classification. The analysis informs modelling choices in later steps — particularly the choice of N-terminal window length and feature engineering strategy.
 
 ---
 
@@ -20,19 +22,24 @@ This folder contains the exploratory data analysis (EDA) performed on the full l
 ## Analyses
 
 ### 1 — Protein length distribution
-Compares full-length protein sizes between SP+ (n=1,093) and SP− (n=8,934) sets using a density histogram (clipped at 2,000 aa) and a boxplot. SP+ proteins are shorter on average (median ~300 aa) than SP− proteins (median ~450 aa), consistent with the expectation that cytosolic/nuclear proteins tend to be larger.
+
+SP+ proteins tend to be shorter than SP− proteins (median ~300 aa vs ~450 aa). This is not surprising — cytosolic and nuclear proteins are on average larger, while secreted proteins tend to be more compact. The difference is large enough to be visible in density histograms but not so extreme as to create a trivially separable length-based classifier, which would have been a red flag.
 
 ### 2 — Signal peptide length distribution
-Examines the cleavage position (= SP length) across all SP+ sequences. SP lengths are tightly distributed between 14 and 40 aa, with a mean of 22.9 aa and a median of 22 aa, consistent with the canonical hydrophobic core length required for translocon insertion.
+
+Across all SP+ sequences, cleavage positions (i.e., SP lengths) are tightly clustered between 14 and 40 aa, with mean 22.9 aa and median 22 aa. This narrow distribution is reassuring — it matches the canonical hydrophobic core length needed for efficient translocon insertion, and it directly motivates truncating protein sequences to the first 40–150 aa in the modelling steps that follow.
 
 ### 3 — Amino acid composition vs SwissProt background
-Computes per-residue frequency in two regions: the SP region of SP+ sequences and the N-terminal 30 aa of SP− sequences. Both are compared against the SwissProt proteome-wide background (ExPASy release statistics). The SP region is markedly enriched in hydrophobic residues (Leu, Ala) and depleted in charged and polar residues, reflecting the hydrophobic core characteristic of signal peptides.
+
+We compare per-residue frequencies in two regions: the SP region of SP+ sequences and the N-terminal 30 aa of SP− sequences, both normalised against the SwissProt proteome-wide background (ExPASy). The SP region is clearly enriched in hydrophobic residues (Leu, Ala) and depleted in charged and polar residues — exactly what the tripartite n-region/h-region/c-region model of signal peptides predicts. Seeing this pattern emerge from the data without any model fitting is a good sanity check that the annotation quality is high.
 
 ### 4 — Kingdom distribution
-Counts sequences by taxonomic kingdom (Metazoa, Viridiplantae, Fungi, Other) for both classes. Both sets are dominated by Metazoa (SP+: 79.3%, SP−: 52.6%), with Fungi and Viridiplantae as secondary kingdoms. The different proportions between classes are noted as a potential source of taxonomic bias in model evaluation.
+
+Both sets are dominated by Metazoa (SP+: 79.3%, SP−: 52.6%), but the proportions differ between classes. This is worth flagging: a model that learns kingdom-specific biases could partially exploit taxonomic identity rather than sequence content. We do not filter by kingdom here, but it is something to keep in mind when interpreting benchmark results, especially if evaluating on non-Metazoan proteins downstream.
 
 ### 5 — Cleavage site sequence logo
-Extracts a 15-residue window (positions −13 to +2 relative to the cleavage site) from all SP+ sequences with valid FASTA entries. A position frequency matrix is built, converted to an information-content matrix using `logomaker`, and displayed as a sequence logo. Strong conservation of Ala at position −1 and Ala/Gly at position −3 confirms the **von Heijne −1/−3 rule** for signal peptidase recognition, validating annotation quality.
+
+We extract a 15-residue window (positions −13 to +2 relative to the cleavage site) from all SP+ sequences with valid FASTA entries, build a position frequency matrix, and convert it to an information-content logo using `logomaker`. The result shows strong conservation of Ala at position −1 and Ala/Gly at position −3 — the classic **von Heijne −1/−3 rule** for signal peptidase I recognition. This validates both the annotation quality and the biological plausibility of the dataset, and directly motivates the 15-position window used in Step 4.
 
 ---
 
@@ -45,7 +52,7 @@ Extracts a 15-residue window (positions −13 to +2 relative to the cleavage sit
 | `logomaker` | Sequence logo from information-content matrix |
 | `biopython` (`SeqIO`) | FASTA parsing for sequence extraction |
 
-All figures are saved in both PNG (screen) and PDF (publication) formats in this folder (`3- Data_analysis/`).
+All figures are saved in both PNG (for screen) and PDF (for publication) formats.
 
 ---
 
@@ -53,8 +60,8 @@ All figures are saved in both PNG (screen) and PDF (publication) formats in this
 
 Upload the following files to Colab before running the notebook:
 
-- `training_with_folds.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
-- `benchmarking_set.tsv` — from [`2- Data_Prepration/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `training_with_folds.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `benchmarking_set.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
 - `positive.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 - `negative.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 
