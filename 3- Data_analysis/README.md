@@ -27,7 +27,7 @@ SP+ proteins tend to be shorter than SP− proteins (median ~300 aa vs ~450 aa).
 
 ### 2 — Signal peptide length distribution
 
-Across all SP+ sequences, cleavage positions (i.e., SP lengths) are tightly clustered between 14 and 40 aa, with mean 22.9 aa and median 22 aa. This narrow distribution is reassuring — it matches the canonical hydrophobic core length needed for efficient translocon insertion, and it directly motivates truncating protein sequences to the first 40–150 aa in the modelling steps that follow.
+Across all SP+ sequences, cleavage positions (i.e., SP lengths) are **tightly** clustered between 14 and 40 aa, with mean 22.9 aa and median 22 aa. This narrow distribution is reassuring — it matches the canonical hydrophobic core length needed for efficient translocon insertion, and it directly motivates truncating protein sequences to the first 40–150 aa in the modelling steps that follow.
 
 ### 3 — Amino acid composition vs SwissProt background
 
