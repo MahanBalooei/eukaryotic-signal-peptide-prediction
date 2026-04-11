@@ -120,7 +120,7 @@ SVM classifier on 28 biochemical features from each protein's N-terminal region,
 - **Selection:** top 20 features by mean RF importance across CV folds
 - **SVM:** RBF kernel, grid search over C and γ, optimising MCC
 
-Top features: `max_tm_propensity`, `max_hydrophobicity`, `avg_hydrophobicity`, `avg_tm_propensity`, `comp_L`
+Top features: `max_tm_propensity`, `max_hydrophobicity`, `avg_tm_propensity`, `avg_hydrophobicity`, `comp_L`
 
 | Metric | 5-Fold CV (all 28) | Benchmark (all 28) | Benchmark (top 20) |
 |--------|--------------------|--------------------|---------------------|
