@@ -214,4 +214,3 @@ For questions about this project, feel free to reach out:
 - **Mahan Balooei** — mahan.balooei@studio.unibo.it
 - **[Negin Nillforoosh]** — negin.nilforosh@studio.unibo.it
 - **[Kimia Kanouni]** — kimia.kanouni@studio.unibo.it
-- ...
