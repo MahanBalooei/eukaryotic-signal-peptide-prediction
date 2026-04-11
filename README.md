@@ -206,3 +206,12 @@ Full dependency lists are in each folder's `README.md`.
 - **UniProtKB / Swiss-Prot REST API:** <https://www.uniprot.org/help/api>
 - **Swiss-Prot release statistics (ExPASy):** <https://web.expasy.org/docs/relnotes/relstat.html>
 - **ESM-2 repository (Meta AI):** <https://github.com/facebookresearch/esm>
+
+## Contact
+
+For questions about this project, feel free to reach out:
+
+- **Mahan Balooei** — mahan.balooei@studio.unibo.it
+- **[Negin Nillforoosh]** — negin.nilforosh@studio.unibo.it
+- **[Kimia Kanouni]** — kimia.kanouni@studio.unibo.it
+- ...
