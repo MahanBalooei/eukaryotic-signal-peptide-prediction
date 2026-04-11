@@ -35,7 +35,7 @@ We compare per-residue frequencies in two regions: the SP region of SP+ sequence
 
 ### 4 — Kingdom distribution
 
-Both sets are dominated by Metazoa (SP+: 79.3%, SP−: 52.6%), but the proportions differ between classes. This is worth flagging: a model that learns kingdom-specific biases could partially exploit taxonomic identity rather than sequence content. We do not filter by kingdom here, but it is something to keep in mind when interpreting benchmark results, especially if evaluating on non-Metazoan proteins downstream.
+Both sets are dominated by Metazoa (SP+: 79.3%, SP−: 52.6%), but the proportions differ between classes. **This is worth flagging:** a model that learns kingdom-specific biases could partially exploit taxonomic identity rather than sequence content. We do not filter by kingdom here, but it is something to keep in mind when interpreting benchmark results, especially if evaluating on non-Metazoan proteins downstream.
 
 ### 5 — Cleavage site sequence logo
 
