@@ -133,7 +133,7 @@ Top features: `max_tm_propensity`, `max_hydrophobicity`, `avg_tm_propensity`, `a
 ---
 
 ### [`6- Deep_learning/`](./6-%20Deep_learning/README.md)
-**Notebook:** `step6_deep_learning_final3_fixed.ipynb`
+**Notebook:** `step6_deep_learning.ipynb`
 
 CNN-LSTM model trained on ESM-2 protein language model embeddings — the best-performing method in the pipeline. The jump in performance over the SVM is largely attributable to the richer input representation: ESM-2 embeddings encode evolutionary and structural context that explicit biochemical features do not capture.
 
