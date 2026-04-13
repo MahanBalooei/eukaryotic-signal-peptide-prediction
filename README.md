@@ -82,7 +82,7 @@ Exploratory analysis performed on the full dataset before any model is trained. 
 
 | Figure | What it shows |
 |--------|---------------|
-| `01_protein_length` | SP+ proteins are shorter (median ~300 aa) than SP− (median ~450 aa) |
+| `01_protein_length` | SP+ proteins are shorter (median ~ 300 aa) than SP− (median ~ 450 aa) |
 | `02_sp_length` | SP lengths tightly distributed around mean=22.9 aa, range 14–65 aa |
 | `03_aa_composition` | SP regions enriched in Leu/Ala and depleted in charged residues vs SwissProt background |
 | `04_kingdom_distribution` | Both sets dominated by Metazoa; different kingdom proportions noted as potential bias |
