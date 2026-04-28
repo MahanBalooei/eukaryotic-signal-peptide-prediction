@@ -1,6 +1,8 @@
 # Step 6 — Deep Learning Signal Peptide Classifier (CNN + BiLSTM on ESM-2 Embeddings)
 
-**LB2 Project · Group 7 · Signal Peptide Prediction Pipeline**
+**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+
+Contribution note: I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
 
 This step trains a deep learning classifier for binary signal peptide detection. The key design decision here is the choice of input representation: rather than hand-crafting biochemical features (as in Step 5) or using simple one-hot encodings, we use **ESM-2 protein language model embeddings** as input. These embeddings encode evolutionary and structural context learned from hundreds of millions of protein sequences, giving the model a much richer starting point than raw sequence identity. A hybrid **1D CNN + bidirectional LSTM** architecture then extracts local and sequential patterns from these embeddings to make the final prediction.
 
