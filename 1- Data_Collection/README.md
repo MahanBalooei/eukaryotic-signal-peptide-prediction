@@ -12,7 +12,7 @@ This folder covers the first step of the pipeline: building a labeled dataset of
 
 | File                        | Description |
 |-----------------------------|-------------|
-| `step1_data_collection-2.ipynb` | End-to-end pipeline: UniProt querying, JSON parsing, filtering, and export to TSV + FASTA |
+| `step1_data_collection.ipynb` | End-to-end pipeline: UniProt querying, JSON parsing, filtering, and export to TSV + FASTA |
 | `positive.tsv`              | Metadata for SP-positive sequences (2,932 entries) |
 | `negative.tsv`              | Metadata for SP-negative sequences (20,615 entries) |
 | `positive.fasta`            | SP-positive sequences in FASTA format |
