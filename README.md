@@ -207,8 +207,7 @@ Full dependency lists are in each folder's `README.md`.
 
 ## Contact
 
-For questions about this project, feel free to reach out:
+For questions about the technical implementation, contact:
 
 - **Mahan Balooei** — mahan.balooei@studio.unibo.it
-- **Negin Nillforoosh** — negin.nilforosh@studio.unibo.it
-- **Kimia Kanouni** — kimia.kanouni@studio.unibo.it
+
