@@ -1,6 +1,8 @@
 # Step 2 — Data Preparation
 
-**LB2 Project · Group 7 · Signal Peptide Prediction**
+**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+
+Contribution note: I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
 
 Raw sequence datasets from public databases almost always contain redundancy — many proteins share high sequence identity simply because they were independently deposited from related organisms or splice variants. Training on a redundant dataset inflates performance metrics and risks data leakage between train and test. This step removes that redundancy and produces the clean, non-overlapping splits that all downstream models are trained and evaluated on.
 
