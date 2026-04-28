@@ -177,7 +177,7 @@ All three methods were trained on identical data splits and evaluated on the sam
 
 All notebooks are designed to run in **Google Colab**. Follow the steps in order:
 
-1. Run `Run `1- Data_Collection/step1_data_collection.ipynb` → produces `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
+1. Run `1- Data_Collection/step1_data_collection.ipynb` → produces `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
 2. Upload outputs to `2- Data_Preparation/step2_data_preparation.ipynb` → produces training and benchmark TSVs
 3. Upload TSVs + FASTA to subsequent notebooks (steps 3–6); required inputs are listed in each folder's `README.md`
 
