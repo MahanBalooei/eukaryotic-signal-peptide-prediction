@@ -17,7 +17,7 @@ The model takes the N-terminal 150 amino acids of each protein, encodes them wit
 ## Repository Contents
 
 ```
-6- Deep_Learning/
+6- Deep_learning/
 ├── step6_deep_learning.ipynb                # Main notebook — full pipeline
 ├── cnn_signal_peptide_model.pt              # Saved final model weights (PyTorch)
 ├── cnn_cv_results.tsv                       # Per-fold CV metrics (5 folds)
