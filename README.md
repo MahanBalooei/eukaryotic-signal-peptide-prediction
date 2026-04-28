@@ -133,7 +133,7 @@ Top features: `max_tm_propensity`, `max_hydrophobicity`, `avg_tm_propensity`, `a
 ### [`6- Deep_learning/`](./6-%20Deep_learning/README.md)
 **Notebook:** `step6_deep_learning.ipynb`
 
-CNN-LSTM model trained on ESM-2 protein language model embeddings — the best-performing method in the pipeline. The jump in performance over the SVM is largely attributable to the richer input representation: ESM-2 embeddings encode evolutionary and structural context that explicit biochemical features do not capture.
+CNN-BiLSTM model trained on ESM-2 protein language model embeddings — the best-performing method in the pipeline. The jump in performance over the SVM is largely attributable to the richer input representation: ESM-2 embeddings encode evolutionary and structural context that explicit biochemical features do not capture.
 
 **Architecture:**
 - Input: ESM-2 (`esm2_t12_35M_UR50D`, dim=480) embeddings of N-terminal 150 aa
@@ -164,7 +164,7 @@ Benchmark confusion matrix: TP=213, FP=11, TN=1776, FN=6
 |-------|-----------|--------|----|-----|--------|---------|
 | Von Heijne (PSWM) | 0.62 | 0.72 | 0.67 | 0.63 | 0.782 | 0.954 |
 | SVM (20 features) | 0.87 | 0.86 | 0.87 | 0.85 | 0.918 | 0.986 |
-| **CNN-LSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** | **0.984** | **0.998** |
+| **CNN-BiLSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** | **0.984** | **0.998** |
 
 All three methods were trained on identical data splits and evaluated on the same held-out benchmark, so the comparison is direct and fair.
 
