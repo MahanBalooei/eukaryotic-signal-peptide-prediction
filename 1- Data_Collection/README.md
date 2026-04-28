@@ -78,7 +78,7 @@ For the negatives, it is not enough to simply exclude sequences with an SP annot
 | Positive (SP+)       | 2,949           | **2,932**       |
 | Negative (SP−)       | 20,615          | **20,615**      |
 
-**Note:** UniProt is updated regularly. These numbers reflect the exact run in `step1_data_collection-2.ipynb` and may shift slightly on a fresh run.
+**Note:** UniProt is updated regularly. These numbers reflect the exact run in `step1_data_collection.ipynb` and may shift slightly on a fresh run.
 
 ---
 
