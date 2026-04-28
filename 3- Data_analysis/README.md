@@ -1,6 +1,8 @@
 # Step 3 — Data Analysis
 
-**LB2 Project · Group 7 · Signal Peptide Prediction**
+**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+
+Contribution note: I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
 
 Before training any model, it is worth asking: does the dataset actually look like what we think it should look like biologically? This step performs exploratory data analysis (EDA) on the full labeled dataset (training + benchmark combined) to verify biological coherence, flag potential biases, and identify which sequence features are likely to be informative for classification. The analysis informs modelling choices in later steps — particularly the choice of N-terminal window length and feature engineering strategy.
 
