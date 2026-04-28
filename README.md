@@ -29,7 +29,7 @@ This pipeline:
 ├── 3- Data_analysis/          # Step 3 — Exploratory analysis and visualizations
 ├── 4- vonHeijne_method/       # Step 4 — PSWM baseline classifier
 ├── 5- SVM-SPSelection/        # Step 5 — SVM with feature selection
-└── 6- Deep_learning/          # Step 6 — CNN-LSTM on ESM-2 embeddings
+└── 6- Deep_learning/          # Step 6 — CNN-BiLSTM on ESM-2 embeddings
 ```
 
 Each folder contains its own `README.md` with detailed documentation, a Jupyter notebook, and all outputs (figures, TSVs, saved models).
