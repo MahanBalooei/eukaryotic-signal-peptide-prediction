@@ -1,6 +1,8 @@
 # Step 5 — SVM Signal Peptide Classifier
 
-**LB2 Project · Group 7 · Signal Peptide Prediction**
+**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+
+Contribution note: I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
 
 ## Overview
 
