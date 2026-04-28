@@ -62,8 +62,8 @@ All figures are saved in both PNG (for screen) and PDF (for publication) formats
 
 Upload the following files to Colab before running the notebook:
 
-- `training_with_folds.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
-- `benchmarking_set.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Prepration/step2_data_preparation.ipynb)
+- `training_with_folds.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Preparation/step2_data_preparation.ipynb)
+- `benchmarking_set.tsv` — from [`2- Data_Preparation/`](../2-%20Data_Preparation/step2_data_preparation.ipynb)
 - `positive.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 - `negative.fasta` — from [`1- Data_Collection/`](../1-%20Data_Collection/DataCollection.ipynb)
 
