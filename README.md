@@ -163,13 +163,13 @@ Benchmark confusion matrix: TP=213, FP=11, TN=1776, FN=6
 
 ## Full Model Comparison (Blind Benchmark, n=2,006)
 
-| Model | Precision | Recall | F1 | MCC | PR-AUC | ROC-AUC |
-|-------|-----------|--------|----|-----|--------|---------|
-| Von Heijne (PSWM) | 0.62 | 0.72 | 0.67 | 0.63 | 0.782 | 0.954 |
-| SVM (20 features) | 0.87 | 0.86 | 0.87 | 0.85 | 0.918 | 0.986 |
-| **CNN-BiLSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** | **0.984** | **0.998** |
+| Model | Precision | Recall | F1 | MCC |
+|---|---:|---:|---:|---:|
+| Von Heijne (PSWM) | 0.625 | 0.717 | 0.668 | 0.626 |
+| SVM (28 features) | 0.872 | 0.868 | 0.870 | 0.854 |
+| **CNN-BiLSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** |
 
-All three methods were trained on identical data splits and evaluated on the same held-out benchmark, so the comparison is direct and fair.
+All three methods were trained using the same training split and evaluated once on the same held-out benchmark set.
 
 ---
 
