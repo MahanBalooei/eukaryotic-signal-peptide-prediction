@@ -1,5 +1,8 @@
 # Eukaryotic Signal Peptide Prediction with Classical ML and ESM-2 Protein Embeddings
-MSc Bioinformatics Project — independently implemented within LB2 project context
+
+**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+
+**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, redundancy reduction, modelling, evaluation, biological analysis, and documentation.
 
 A reproducible machine learning pipeline for **eukaryotic signal peptide (SP) prediction**, built using UniProtKB/Swiss-Prot protein annotations. The project implements and compares three modelling approaches: a classical rule-based **Von Heijne PSWM baseline**, an **SVM classifier using biochemical sequence features**, and a **CNN-BiLSTM classifier using ESM-2 protein language model embeddings**. All methods are evaluated using consistent train/validation/benchmark splits and comparable classification metrics.
 
