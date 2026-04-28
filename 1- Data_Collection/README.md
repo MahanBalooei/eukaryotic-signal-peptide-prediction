@@ -84,7 +84,7 @@ For the negatives, it is not enough to simply exclude sequences with an SP annot
 
 ## How to Run
 
-Open `step1_data_collection-2.ipynb` in Google Colab (or any Jupyter environment with internet access). All four output files will be generated automatically.
+Open `step1_data_collection.ipynb` in Google Colab (or any Jupyter environment with internet access). All four output files will be generated automatically.
 
 **Next step:** Run `data_preparation/step2_data_preparation.ipynb` to perform MMseqs2 clustering and the 80/20 train/benchmark split.
 
