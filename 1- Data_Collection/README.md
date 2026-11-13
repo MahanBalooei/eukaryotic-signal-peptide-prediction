@@ -2,7 +2,7 @@
 
 **MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
 
-**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, redundancy reduction, modelling, evaluation, biological analysis, and documentation.
+**Contribution note:** This was assigned as a group project (Group 7). I rebuilt the pipeline on my own in April 2026. In this folder, the UniProt retrieval functions in the notebook are kept from the group's original version; the rest of the notebook and this documentation are mine.
 
 This folder covers the first step of the pipeline: building a labeled dataset of signal peptide (SP) positive and negative protein sequences. Everything is retrieved programmatically from the UniProt REST API, with filtering baked directly into the query rather than applied post-hoc — this keeps the dataset clean without requiring an extra manual curation pass.
 

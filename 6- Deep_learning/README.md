@@ -2,7 +2,7 @@
 
 **MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
 
-**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
+**Contribution note:** This was assigned as a group project (Group 7). I rebuilt the pipeline on my own in April 2026, and the notebook and documentation in this folder are my implementation.
 
 This step trains a deep learning classifier for binary signal peptide detection. The key design decision here is the choice of input representation: rather than hand-crafting biochemical features (as in Step 5) or using simple one-hot encodings, we use **ESM-2 protein language model embeddings** as input. These embeddings encode evolutionary and structural context learned from hundreds of millions of protein sequences, giving the model a much richer starting point than raw sequence identity. A hybrid **1D CNN + bidirectional LSTM** architecture then extracts local and sequential patterns from these embeddings to make the final prediction.
 
