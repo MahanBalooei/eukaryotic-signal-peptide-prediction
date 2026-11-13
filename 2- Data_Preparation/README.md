@@ -2,7 +2,7 @@
 
 **MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
 
-**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, redundancy reduction, modelling, evaluation, biological analysis, and documentation.
+**Contribution note:** This was assigned as a group project (Group 7). I rebuilt the pipeline on my own in April 2026, and the notebook and documentation in this folder are my implementation.
 
 Raw sequence datasets from public databases almost always contain redundancy — many proteins share high sequence identity simply because they were independently deposited from related organisms or splice variants. Training on a redundant dataset inflates performance metrics and risks data leakage between train and test. This step removes that redundancy and produces the clean, non-overlapping splits that all downstream models are trained and evaluated on.
 

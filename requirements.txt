@@ -1,0 +1,10 @@
+requests
+biopython
+pandas
+numpy
+matplotlib
+seaborn
+logomaker
+scikit-learn
+torch
+fair-esm

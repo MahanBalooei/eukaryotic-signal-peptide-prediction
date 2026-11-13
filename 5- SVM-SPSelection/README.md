@@ -2,7 +2,7 @@
 
 **MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
 
-**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, modelling, evaluation, biological analysis, and documentation.
+**Contribution note:** This was assigned as a group project (Group 7). I rebuilt the pipeline on my own in April 2026, and the notebook and documentation in this folder are my implementation.
 
 ## Overview
 

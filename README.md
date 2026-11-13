@@ -1,153 +1,76 @@
-# Eukaryotic Signal Peptide Prediction with Classical ML and ESM-2 Protein Embeddings
+# Eukaryotic Signal Peptide Prediction: PSWM, SVM and ESM-2 Embeddings
 
-**MSc Bioinformatics LB2 Project · Signal Peptide Prediction**
+MSc Bioinformatics, University of Bologna. Project for the Laboratory of Bioinformatics 2 course.
 
-**Contribution note:** I independently implemented the technical pipeline, including data collection, preprocessing, redundancy reduction, modelling, evaluation, biological analysis, and documentation.
+This repository compares three ways of predicting whether a eukaryotic protein carries an N-terminal signal peptide: a von Heijne position-specific weight matrix, an SVM on hand-crafted biochemical features, and a CNN-BiLSTM on ESM-2 embeddings. All three are trained on the same training set and tested once on the same held-out benchmark.
 
-A reproducible machine learning pipeline for **eukaryotic signal peptide (SP) prediction**, built using UniProtKB/Swiss-Prot protein annotations. The project implements and compares three modelling approaches: a classical rule-based **Von Heijne PSWM baseline**, an **SVM classifier using biochemical sequence features**, and a **CNN-BiLSTM classifier using ESM-2 protein language model embeddings**. All methods are evaluated using consistent train/validation/benchmark splits and comparable classification metrics.
+The course assigned this as a group project (Group 7), and the repository began in autumn 2025 as shared work with Kimia Kanouni and Negin Nilforoosh. In April 2026 I rebuilt the pipeline on my own. The data preparation, exploratory analysis, all three models, the evaluation and the documentation in this repository are my implementation. The UniProt retrieval functions in the step 1 notebook are kept from the group's original version.
 
----
+## Results on the held-out benchmark (2,006 proteins, 219 positives)
 
-## What This Project Does
+| Model | Precision | Recall | F1 | MCC |
+|---|---:|---:|---:|---:|
+| von Heijne PSWM | 0.625 | 0.717 | 0.668 | 0.626 |
+| SVM, 28 features | 0.872 | 0.868 | 0.870 | 0.854 |
+| CNN-BiLSTM on ESM-2 | 0.951 | 0.973 | 0.962 | 0.957 |
 
-Signal peptides are short N-terminal sequences that direct proteins into the secretory pathway. Predicting their presence is a fundamental problem in proteomics — it matters for annotating newly sequenced proteomes, designing recombinant proteins for secretion, and identifying candidate drug targets among secreted proteins.
+The benchmark has only 219 positives and comes from a single split, so these numbers have no confidence intervals. Read the ranking as clear and the exact values as approximate. The section on limitations below says what else to keep in mind.
 
-This pipeline:
-1. Collects a high-confidence labeled dataset from UniProtKB (Swiss-Prot), using experimental evidence filters to avoid training on computationally predicted annotations
-2. Removes sequence redundancy using MMseqs2 clustering, so the train/benchmark split is biologically meaningful
-3. Performs exploratory analysis to validate biological coherence and motivate modelling choices
-4. Trains and evaluates three classifiers of increasing complexity:
-   - **Von Heijne** — position-specific weight matrix (PSWM) baseline
-   - **SVM** — biochemical features + Random Forest selection
-   - **CNN-BiLSTM** — ESM-2 protein language model embeddings
+## Why signal peptides
 
----
+Signal peptides are short N-terminal sequences that send a protein into the secretory pathway and are then cleaved off. Knowing whether a protein has one matters when annotating new proteomes, when designing proteins for secretion, and when looking for secreted drug targets.
 
-## Repository Structure
+## How the data were built
 
-```
-.
-├── 1- Data_Collection/        # Step 1 — UniProtKB retrieval and filtering
-├── 2- Data_Preparation/       # Step 2 — MMseqs2 clustering, splits, CV folds
-├── 3- Data_analysis/          # Step 3 — Exploratory analysis and visualizations
-├── 4- vonHeijne_method/       # Step 4 — PSWM baseline classifier
-├── 5- SVM-SPSelection/        # Step 5 — SVM with feature selection
-└── 6- Deep_learning/          # Step 6 — CNN-BiLSTM on ESM-2 embeddings
-```
+**Collection (step 1).** Proteins come from UniProtKB/Swiss-Prot through the REST API, restricted to eukaryotes with protein-level evidence (PE1).
 
-Each folder contains its own `README.md` with detailed documentation, a Jupyter notebook, and all outputs (figures, TSVs, saved models).
+| Set | Criteria | Proteins |
+|---|---|---:|
+| Positive | Experimentally confirmed signal peptide, known cleavage site, signal peptide of at least 14 residues | 2,932 |
+| Negative | No signal peptide annotation, experimentally confirmed location in cytosol, nucleus, mitochondrion, plastid, peroxisome or membrane | 20,615 |
 
----
+**Redundancy reduction and split (step 2).** Positives and negatives were clustered separately with MMseqs2 `easy-cluster` (30% identity, 40% coverage, connected-component mode), and only one representative per cluster was kept. The 80/20 train/benchmark split was made afterwards, on the representatives, stratified by class. So within each class, no two proteins anywhere in the dataset come from the same cluster, which is what keeps close homologs from sitting on both sides of the split. Clustering was done per class, so similarity between a positive and a negative was not filtered.
 
-## Folder Guide
-
-### [`1- Data_Collection/`](./1-%20Data_Collection/README.md)
-**Notebook:** `step1_data_collection.ipynb`
-
-Retrieves eukaryotic proteins from UniProtKB via REST API and applies strict experimental evidence filters to produce two labeled sets. A deliberate choice was made here to require experimentally confirmed signal peptides (not just predicted ones) for the positive set, and experimentally confirmed subcellular localisation to non-secretory compartments for the negative set — this avoids any circularity with computational annotation.
-
-| Set | Criteria | Final count |
-|-----|----------|-------------|
-| Positive (SP+) | Swiss-Prot, PE1, experimentally confirmed SP, cleavage site known, SP ≥ 14 aa | 2,932 |
-| Negative (SP−) | Swiss-Prot, PE1, no SP annotation, localized to cytosol/nucleus/mitochondrion/plastid/peroxisome/membrane | 20,615 |
-
-**Key outputs:** `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
-
----
-
-### [`2- Data_Preparation/`](./2-%20Data_Preparation/README.md)
-**Notebook:** `step2_data_preparation.ipynb`
-
-Removes redundant sequences and constructs train/benchmark splits with cross-validation fold assignments. The same splits are reused across all modelling steps (4, 5, 6) so that model comparisons reflect genuine performance differences, not lucky data partitions.
-
-| Step | Tool/method | Detail |
-|------|-------------|--------|
-| Redundancy removal | MMseqs2 `easy-cluster` | 30% identity, 40% coverage, connected-component mode |
-| Train/benchmark split | Stratified 80/20 | Per-class shuffle, `RANDOM_SEED=42` |
-| CV fold assignment | Stratified 5-fold | Per-class, pre-assigned |
-
-| Set | Positive | Negative | Total |
-|-----|----------|----------|-------|
+| Stage | Positive | Negative | Total |
+|---|---:|---:|---:|
+| Raw | 2,932 | 20,615 | 23,547 |
 | After clustering | 1,093 | 8,934 | 10,027 |
-| Training (80%) | ~874 | ~7,147 | 8,021 |
-| Benchmark (20%) | ~219 | ~1,787 | 2,006 |
+| Training (80%) | 874 | 7,147 | 8,021 |
+| Benchmark (20%) | 219 | 1,787 | 2,006 |
 
-**Key outputs:** `training_with_folds.tsv`, `benchmarking_set.tsv`, `filtered_positive.tsv`, `filtered_negative.tsv`
+The training set carries pre-assigned 5-fold cross-validation labels, and the same folds are used by all three models.
 
----
+**How the benchmark was protected.** The benchmark was set aside in step 2 and used only for the final evaluation of each model. Every tuning decision was made inside the training set:
 
-### [`3- Data_analysis/`](./3-%20Data_analysis/README.md)
-**Notebook:** `step3_data_analysis.ipynb`
+- SVM: C and gamma were chosen by cross-validation on the training folds (nested CV for the reported CV scores, plain 5-fold CV for the final model).
+- CNN-BiLSTM: early stopping watched the MCC of the validation fold. The final model was then retrained on the whole training set for the median best epoch found in CV, with no access to the benchmark.
 
-Exploratory analysis performed on the full dataset before any model is trained. The goal is to confirm the dataset is biologically coherent and to inform downstream design choices — particularly, what N-terminal window lengths and feature types are likely to be informative.
+## The three models
 
-| Figure | What it shows |
-|--------|---------------|
-| `01_protein_length` | SP+ proteins are shorter (median ~ 300 aa) than SP− (median ~ 450 aa) |
-| `02_sp_length` | SP lengths tightly distributed around mean=22.9 aa, range 14–65 aa |
-| `03_aa_composition` | SP regions enriched in Leu/Ala and depleted in charged residues vs SwissProt background |
-| `04_kingdom_distribution` | Both sets dominated by Metazoa; different kingdom proportions noted as potential bias |
-| `05_cleavage_site_logo` | Strong Ala conservation at −1 and −3 confirms the von Heijne −1/−3 rule |
+### von Heijne PSWM (step 4)
 
-All figures are exported as both PNG and PDF inside `3- Data_analysis/`.
+A weight matrix over 15 positions around the cleavage site (-13 to +2), scored as log-odds against the Swiss-Prot background with a pseudocount of 1. At prediction time the matrix slides over N-terminal positions 15 to 100 and the best score is kept. It is a weak classifier but an easy one to inspect, and the matrix shows the expected hydrophobic core and the -3/-1 rule, which is a useful check on the dataset.
 
----
+5-fold CV: ROC-AUC 0.954, PR-AUC 0.782, F1 0.708.
+Benchmark: TP 157, FP 94, TN 1,693, FN 62.
 
-### [`4- vonHeijne_method/`](./4-%20vonHeijne_method/README.md)
-**Notebook:** `step4_von_heijne.ipynb`
+### SVM on biochemical features (step 5)
 
-Classical PSWM-based classifier serving as an interpretable rule-based baseline. Because every prediction can be traced back to position-specific amino acid frequencies, this method also acts as a sanity check on the dataset — if the PSWM heatmap did not show the expected hydrophobic core pattern, it would indicate a problem with data quality.
+An RBF-kernel SVM on 28 features from the N-terminus: amino acid composition of the first 20 residues, and hydrophobicity, transmembrane propensity, helix propensity and charge over the first 40. A random forest ranks the features. The five most important are maximum and average transmembrane propensity, maximum and average hydrophobicity, and leucine content, which is what you would expect from the hydrophobic core of a signal peptide.
 
-- **Window:** 15 positions (−13 to +2 relative to cleavage site)
-- **Scoring:** log-odds vs SwissProt background, pseudocount=1.0
-- **Inference:** sliding window over N-terminal positions 15–100, maximum score
+5-fold CV (all 28 features): ROC-AUC 0.986, PR-AUC 0.918, F1 0.868.
+Benchmark: TP 190, FP 28 with all 28 features; TP 188, FP 29 with the top 20.
 
-| Metric | 5-Fold CV |
-|--------|-----------|
-| ROC-AUC | 0.954 |
-| PR-AUC | 0.782 |
-| F1 | 0.708 |
+### CNN-BiLSTM on ESM-2 embeddings (step 6)
 
-Benchmark confusion matrix: TP=157, FP=94, TN=1693, FN=62
+- Input: per-residue embeddings of the first 150 residues from `esm2_t12_35M_UR50D` (480 dimensions). The language model is frozen; only the classifier is trained.
+- Three Conv1d blocks (64, 128, 128 filters; kernels 3, 5, 3) with batch normalisation and max pooling
+- Two-layer bidirectional LSTM, hidden size 128
+- Classifier head with dropout 0.3
+- Adam (lr 1e-3), class-weighted BCE loss (positive weight about 8.2), gradient clipping at 1.0
 
----
-
-### [`5- SVM-SPSelection/`](./5-%20SVM-SPSelection/README.md)
-**Notebook:** `step5_svm.ipynb`
-
-SVM classifier on 28 biochemical features from each protein's N-terminal region, with feature selection via Random Forest importance. The top features — hydrophobicity and TM propensity — confirm that the model is picking up on genuine signal peptide biology rather than dataset artefacts.
-
-- **Features:** AA composition (first 20 aa), hydrophobicity, TM propensity, alpha-helix propensity, charge features (first 40 aa)
-- **Selection:** top 20 features by mean RF importance across CV folds
-- **SVM:** RBF kernel, grid search over C and γ, optimising MCC
-
-Top features: `max_tm_propensity`, `max_hydrophobicity`, `avg_tm_propensity`, `avg_hydrophobicity`, `comp_L`
-
-| Metric | 5-Fold CV (all 28) | Benchmark (all 28) | Benchmark (top 20) |
-|--------|--------------------|--------------------|---------------------|
-| ROC-AUC | 0.986 | — | — |
-| PR-AUC | 0.918 | — | — |
-| F1 | 0.868 | — | — |
-| TP | — | 190 | 188 |
-| FP | — | 28 | 29 |
-
----
-
-### [`6- Deep_learning/`](./6-%20Deep_learning/README.md)
-**Notebook:** `step6_deep_learning.ipynb`
-
-CNN-BiLSTM model trained on ESM-2 protein language model embeddings — the best-performing method in the pipeline. The jump in performance over the SVM is largely attributable to the richer input representation: ESM-2 embeddings encode evolutionary and structural context that explicit biochemical features do not capture.
-
-**Architecture:**
-- Input: ESM-2 (`esm2_t12_35M_UR50D`, dim=480) embeddings of N-terminal 150 aa
-- 3 × Conv1d blocks (64/128/128 filters, kernels 3/5/3) + BatchNorm + MaxPool
-- 2-layer bidirectional LSTM (hidden=128)
-- Classifier head with Dropout(0.3)
-
-**Training:** Adam lr=1e-3, BCEWithLogitsLoss with class weights (pos_weight≈8.2), ReduceLROnPlateau, early stopping on val MCC (patience=5), gradient clipping (max norm=1.0)
-
-| Metric | 5-Fold CV (mean ± std) | Benchmark |
-|--------|------------------------|-----------|
+| Metric | 5-fold CV (mean ± sd) | Benchmark |
+|---|---|---:|
 | Precision | 0.976 ± 0.014 | 0.951 |
 | Recall | 0.974 ± 0.009 | 0.973 |
 | F1 | 0.975 ± 0.006 | 0.962 |
@@ -155,62 +78,52 @@ CNN-BiLSTM model trained on ESM-2 protein language model embeddings — the best
 | PR-AUC | 0.980 ± 0.009 | 0.984 |
 | ROC-AUC | 0.996 ± 0.001 | 0.998 |
 
-Benchmark confusion matrix: TP=213, FP=11, TN=1776, FN=6
+Benchmark: TP 213, FP 11, TN 1,776, FN 6. The trained weights are in `6- Deep_learning/cnn_signal_peptide_model.pt`.
 
-**Saved model:** `deep_learning/cnn_signal_peptide_model.pt`
+## Limitations
 
----
+- **The negatives are the easy ones.** They are proteins with a confirmed non-secretory location. Secreted proteins without a signal peptide, and proteins whose N-terminal transmembrane helix looks like one, are the cases that make this problem hard in a real proteome, and the first group is absent here. Expect lower performance on a whole proteome than on this benchmark.
+- **The models do not see the same input.** The PSWM uses a 15-residue window, the SVM the first 20 to 40 residues, the CNN the first 150. I did not run an ablation, so I cannot say how much of the CNN's advantage comes from the ESM-2 representation and how much from the longer window or the architecture.
+- **One split, one seed.** Everything uses `RANDOM_SEED = 42`. The CV standard deviations give some idea of the variance, but the benchmark figures are single numbers.
+- **Small language model.** I used the 35M-parameter ESM-2 to stay within Colab limits. Larger checkpoints were not tested.
+- **No comparison with SignalP** or other published predictors on the same benchmark.
 
-## Full Model Comparison (Blind Benchmark, n=2,006)
+## Repository layout
 
-| Model | Precision | Recall | F1 | MCC |
-|---|---:|---:|---:|---:|
-| Von Heijne (PSWM) | 0.625 | 0.717 | 0.668 | 0.626 |
-| SVM (28 features) | 0.872 | 0.868 | 0.870 | 0.854 |
-| **CNN-BiLSTM (ESM-2)** | **0.951** | **0.973** | **0.962** | **0.957** |
+```
+1- Data_Collection/     UniProtKB retrieval and filtering
+2- Data_Preparation/    MMseqs2 clustering, train/benchmark split, CV folds
+3- Data_analysis/       Exploratory analysis and figures
+4- vonHeijne_method/    PSWM baseline
+5- SVM-SPSelection/     SVM with feature selection
+6- Deep_learning/       CNN-BiLSTM on ESM-2 embeddings
+```
 
-All three methods were trained using the same training split and evaluated once on the same held-out benchmark set.
+Each folder has its own README, the notebook, and the outputs it produced (tables, figures, and for step 6 the trained model). The exploratory analysis in step 3 covers protein length, signal peptide length (mean 22.9 residues, range 14 to 65), amino acid composition, taxonomic distribution and the cleavage-site logo.
 
----
+## Running it
 
-## How to Reproduce
+The notebooks were written for Google Colab and are meant to be run in order.
 
-All notebooks are designed to run in **Google Colab**. Follow the steps in order:
+1. Run `1- Data_Collection/step1_data_collection.ipynb`. It writes `positive.fasta`, `negative.fasta`, `positive.tsv` and `negative.tsv`.
+2. Upload those four files to `2- Data_Preparation/step2_data_preparation.ipynb`, which writes the training and benchmark tables.
+3. Steps 3 to 6 each need the tables and FASTA files from the earlier steps; the README in each folder lists exactly which.
 
-1. Run `1- Data_Collection/step1_data_collection.ipynb` → produces `positive.fasta`, `negative.fasta`, `positive.tsv`, `negative.tsv`
-2. Upload outputs to `2- Data_Preparation/step2_data_preparation.ipynb` → produces training and benchmark TSVs
-3. Upload TSVs + FASTA to subsequent notebooks (steps 3–6); required inputs are listed in each folder's `README.md`
+Passing files between notebooks by hand is the weak point of the setup. The outputs of every step are committed, so any single notebook can be run without repeating the ones before it. Step 1 queries the live UniProt API, so re-running it later will return a slightly different dataset as Swiss-Prot is updated; the committed files are the ones behind the numbers above.
 
-Each notebook installs its own dependencies via `pip` and `apt-get`.
+Python packages are listed in `requirements.txt`. MMseqs2 is installed separately (`apt-get install mmseqs2` on Colab, or through bioconda). Step 6 needs a GPU to finish in reasonable time.
 
-> **Reproducibility:** All random operations use `RANDOM_SEED = 42`. Do not change this value across any step.
+## Sources
 
----
-
-## Dependencies (summary)
-
-| Tool | Used in |
-|------|---------|
-| `requests` | data_collection |
-| `mmseqs2` | data_preparation |
-| `biopython`, `pandas`, `numpy` | all steps |
-| `matplotlib`, `seaborn`, `logomaker` | data_analysis |
-| `scikit-learn` | von_heijne, SVM, deep_learning |
-| `torch`, `fair-esm` | deep_learning |
-
-Full dependency lists are in each folder's `README.md`.
-
----
-
-## Data Source
-
-- **UniProtKB / Swiss-Prot REST API:** <https://www.uniprot.org/help/api>
-- **Swiss-Prot release statistics (ExPASy):** <https://web.expasy.org/docs/relnotes/relstat.html>
-- **ESM-2 repository (Meta AI):** <https://github.com/facebookresearch/esm>
+- UniProtKB/Swiss-Prot REST API: <https://www.uniprot.org/help/api>
+- ESM-2: Lin et al., Science 2023, <https://github.com/facebookresearch/esm>
+- MMseqs2: Steinegger and Söding, Nature Biotechnology 2017
+- von Heijne G., Nucleic Acids Research 1986
 
 ## Contact
 
-For questions about the technical implementation, contact:
+Mahan Balooei, mahan.balooei@studio.unibo.it
 
-- **Mahan Balooei** — mahan.balooei@studio.unibo.it
+## License
 
+MIT. See `LICENSE`.
